@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const { Posts } = require('../models');
 
+//게시글 조회
 router.get('/post', async (req, res) => {
   try {
     const posts = await Posts.findAll({
@@ -28,6 +29,7 @@ router.get('/post', async (req, res) => {
   }
 });
 
+//게시글 작성
 router.post('/post', async (req, res) => {
   //   try {
   // const { postId, accountId, nick } = res.locals.user;
@@ -60,6 +62,7 @@ router.post('/post', async (req, res) => {
   //   }
 });
 
+//게시글 삭제
 router.delete('/post/:postId', async (req, res) => {
   try {
     // const { userId } = res.locals.user;

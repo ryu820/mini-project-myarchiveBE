@@ -42,23 +42,11 @@ router.post('/login', async (req, res) => {
 
     //쿠키발급
     res.cookie('authorization', `Bearer ${token}`);
+    res.json("성공")
   } catch (err) {
     console.log(err);
   }
 });
 
-//미들웨어 정보 가져오기
-router.get('/posts', authMiddleware, async (req, res) => {
-  try {
-    const { userId } = res.locals.user;
-
-    console.log(userId);
-
-    return res.status(201).json({ userId });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ userId });
-  }
-});
 
 module.exports = router;
