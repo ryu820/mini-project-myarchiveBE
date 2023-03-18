@@ -14,7 +14,7 @@ router.get("/", async (req, res, next) => {
   try {
     const posts = await Posts.findAll({
       raw: true,
-      attributes: ["post_Id","User.accountId","User.nick","url","category","title","desc","isDone"],
+      attributes: ["postId","User.accountId","User.nick","url","category","title","desc","isDone"],
       order: [["createdAt", "DESC"]],
       include: [{
         model: Users,
@@ -95,13 +95,13 @@ router.post("/post", authmiddleware, async (req, res, next) => {
   }
 })
 //게시글 삭제 api
-//localhost:3017/post/:post_id
-router.delete("/post/:post_id", authmiddleware, async (req, res, next) => {
+//localhost:3017/post/:postId
+router.delete("/post/:postId", authmiddleware, async (req, res, next) => {
   try {
     const { userId } = res.locals.user;
-    const { post_id } = req.params;
+    const { postId } = req.params;
    
-    const post = await Posts.findOne({ where: { post_id } });
+    const post = await Posts.findOne({ where: { postId } });
 
     if (!post) {
       throw new CustomError("게시글이 존재하지 않습니다.", 404);
@@ -111,7 +111,7 @@ router.delete("/post/:post_id", authmiddleware, async (req, res, next) => {
     console.log(post)
     await Posts.destroy({
       where: {
-        [Op.and]: [{ post_id }, { userId: userId }],
+        [Op.and]: [{ postId }, { userId: userId }],
       },
     });
     return res.status(200).json({ "message": "게시글이 삭제되었습니다." });
