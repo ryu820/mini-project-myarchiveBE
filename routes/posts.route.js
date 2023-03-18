@@ -63,7 +63,6 @@ router.post("/post", authmiddleware, async (req, res) => {
     const $ = cheerio.load(response.data);
     //img mainImg의 src에 붙어있는 url을 가져온다.
     let imageUrl = $("img#mainImg").attr("src");
-    console.log(imageUrl);
 
     //url이 존재하지 않으면
     if (!imageUrl || imageUrl === undefined) {
