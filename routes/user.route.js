@@ -1,14 +1,14 @@
-const express = require('express');
-const jwt = require('jsonwebtoken');
+const express = require("express");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
-const { Users } = require('../models');
+const { Users } = require("../models");
 require("dotenv").config();
-const env = process.env
+const env = process.env;
 
 
 //★ 회원가입 아이디 중복확인
-router.post("/register/check-id", async (req,res) => {
-  const { accountId } = req.body; 
+router.post("/register/check-id", async (req, res) => {
+  const { accountId } = req.body;
   const checkId = await Users.findOne({ where: { accountId } });
 
   if(checkId){ 
@@ -18,10 +18,12 @@ router.post("/register/check-id", async (req,res) => {
   res.status(200).json({"message": "사용가능한 아이디 입니다"});
 }); 
 
+
 //★ 회원가입 닉네임 중복확인
-router.post("/register/check-nick",async (req,res) => {
+router.post("/register/check-nick", async (req, res) => {
   const { nick } = req.body;
   const checkNick = await Users.findOne({ where: { nick } });
+
   
   if(checkNick){ 
     return res.status(400).json({"message" : "중복된 닉네임 입니다"});
@@ -30,54 +32,60 @@ router.post("/register/check-nick",async (req,res) => {
 });
 
 
+
+
 // ★회원가입
-router.post('/register', async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     const { accountId, password, confirm, nick } = req.body;
     const regex = /^[a-z0-9]{4,}$/;
 
-    if(!regex.test(accountId)){ 
+    if (!regex.test(accountId)) {
       console.log(accountId + " = 형식이 일치하지 않습니다");
-      res.status(412).json({"errorMessage": "닉네임의 형식이 일치하지 않습니다."});
-    } else if (password.includes(nick)){
-      res.status(412).json({"errorMessage": "패스워드에 닉네임이 포함되어 있습니다."});
-    } else { 
+      res
+        .status(412)
+        .json({ errorMessage: "닉네임의 형식이 일치하지 않습니다." });
+    } else if (password.includes(nick)) {
+      res
+        .status(412)
+        .json({ errorMessage: "패스워드에 닉네임이 포함되어 있습니다." });
+    } else {
       console.log(accountId + " = 형식이 일치");
     }
-    
-  
+
     await Users.create({ accountId, password, nick });
-    return res.status(201).json({ message: '회원가입이 완료되었습니다.' });
+    return res.status(201).json({ message: "회원가입이 완료되었습니다." });
   } catch (err) {
     console.log(err);
-    return res.status(400).json({ errorMessage: '회원가입에 요청한 데이터 형식이 올바르지 않습니다..' });
+    return res.status(400).json({
+      errorMessage: "회원가입에 요청한 데이터 형식이 올바르지 않습니다..",
+    });
   }
 });
 
 //★로그인
-router.post('/login', async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
     const { accountId, password } = req.body;
 
     const user = await Users.findOne({ where: { accountId } });
     if (!user) {
-      return res.json('닉네임 또는 패스워드를 확인 해주세요(닉네임)');
+      return res.json("닉네임 또는 패스워드를 확인 해주세요(닉네임)");
     }
 
     if (user.password != password) {
-      return res.json('닉네임 또는 패스워드를 확인 해주세요(비밀번호)');
+      return res.json("닉네임 또는 패스워드를 확인 해주세요(비밀번호)");
     }
 
     //jwt생성
     const token = jwt.sign({ userId: user.userId }, env.SECRET_KEY);
 
     //쿠키발급
-    res.cookie('authorization', `Bearer ${token}`);
+    res.cookie("authorization", `Bearer ${token}`);
     res.status(200).json({ token });
   } catch (err) {
     console.log(err);
   }
 });
-
 
 module.exports = router;
