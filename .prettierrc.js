@@ -1,8 +1,8 @@
 module.exports = {
-    trailingComma: 'es5',
-    tabWidth: 2,
-    semi: true,
-    singleQuote: true,
-    arrowParens: 'always',
-    'editor.formatOnType': true,
-  };
+  trailingComma: 'es5',
+  tabWidth: 2,
+  semi: true,
+  singleQuote: false,
+  arrowParens: 'always',
+  'editor.formatOnType': true,
+};
