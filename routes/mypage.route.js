@@ -9,13 +9,13 @@ router.get("/mypage", authmiddleware, async(req,res) => {
     const donepostlist = await Posts.findAll({
         where : {
             userId : userId,
-            isDone : "true"
+            isDone : true
         }
     })
     const notDonepostlist = await Posts.findAll({
         where : {
             userId : userId,
-            isDone : "false"
+            isDone : false
         }
     })
     const postslist = {done : donepostlist , notdone : notDonepostlist}
