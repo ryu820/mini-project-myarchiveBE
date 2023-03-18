@@ -52,12 +52,12 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ errorMessage: "중복된 닉네임입니다." });
     }
 
-    if (!regex.test(nick)) {
-      console.log(nick + " = 형식이 일치하지 않습니다");
-      return res
-        .status(412)
-        .json({ errorMessage: "닉네임의 형식이 일치하지 않습니다." });
-    }
+    // if (!regex.test(nick)) {
+    //   console.log(nick + " = 형식이 일치하지 않습니다");
+    //   return res
+    //     .status(412)
+    //     .json({ errorMessage: "닉네임의 형식이 일치하지 않습니다." });
+    // }
 
     //아이디 체크
     const checkId = await Users.findOne({ where: { accountId } });
@@ -65,19 +65,19 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ errorMessage: "중복된 아이디입니다." });
     }
 
-    if (!regex.test(accountId)) {
-      console.log(accountId + " = 형식이 일치하지 않습니다");
-      return res
-        .status(412)
-        .json({ errorMessage: "닉네임의 형식이 일치하지 않습니다." });
-    }
+    // if (!regex.test(accountId)) {
+    //   console.log(accountId + " = 형식이 일치하지 않습니다");
+    //   return res
+    //     .status(412)
+    //     .json({ errorMessage: "닉네임의 형식이 일치하지 않습니다." });
+    // }
 
-    if (!regex.test(password)) {
-      console.log(password + " = 형식이 일치하지 않습니다");
-      return res
-        .status(412)
-        .json({ errorMessage: "패스워드 형식이 일치하지 않습니다." });
-    }
+    // if (!regex.test(password)) {
+    //   console.log(password + " = 형식이 일치하지 않습니다");
+    //   return res
+    //     .status(412)
+    //     .json({ errorMessage: "패스워드 형식이 일치하지 않습니다." });
+    // }
 
     if (password.toString().includes(nick)) {
       return res
