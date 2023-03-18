@@ -27,7 +27,7 @@ router.post("/register/check-nick",async (req,res) => {
   res.status(200).json({data: "사용가능한 닉네임 입니다"});
 });
 
-const regex = /^[a-zA-Z0-9]/;
+
 
 
 
@@ -35,11 +35,13 @@ const regex = /^[a-zA-Z0-9]/;
 router.post('/register', async (req, res) => {
   try {
     const { accountId, password, confirm, nick } = req.body;
-
+    const regex = /^[a-z0-9]{4,}$/;
 
     if(!regex.test(accountId)){ 
       console.log(accountId + " = 형식이 일치하지 않습니다");
       res.status(412).json({"errorMessage": "닉네임의 형식이 일치하지 않습니다."});
+    } else if (password.includes(nick)){
+      res.status(412).json({"errorMessage": "패스워드에 닉네임이 포함되어 있습니다."});
     } else { 
       console.log(accountId + " = 형식이 일치");
     }
@@ -55,9 +57,9 @@ router.post('/register', async (req, res) => {
     // # 400 예외 케이스에서 처리하지 못한 에러
     // {"errorMessage": "요청한 데이터 형식이 올바르지 않습니다."}
     
-    return res.send();
-    // await Users.create({ accountId, password, nick });
-    // return res.status(201).json({ message: '회원가입이 완료되었습니다.' });
+    // return res.send();
+    await Users.create({ accountId, password, nick });
+    return res.status(201).json({ message: '회원가입이 완료되었습니다.' });
   } catch (err) {
     console.log(err);
     return res.status(400).json({ errorMessage: '회원가입에 요청한 데이터 형식이 올바르지 않습니다..' });
