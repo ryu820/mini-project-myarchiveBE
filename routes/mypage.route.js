@@ -11,7 +11,7 @@ router.get("/mypage", authmiddleware, async (req, res) => {
     const { userId } = res.locals.user;
     const donepostlist = await Posts.findAll({
       attributes: [
-        "post_id",
+        "postId",
         "url",
         "title",
         "category",
@@ -28,7 +28,7 @@ router.get("/mypage", authmiddleware, async (req, res) => {
     });
     const notDonepostlist = await Posts.findAll({
       attributes: [
-        "post_id",
+        "postId",
         "url",
         "title",
         "category",
