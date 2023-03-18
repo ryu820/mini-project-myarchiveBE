@@ -4,3 +4,4 @@ module.exports = class CustomError extends Error {
     (this.message = message), (this.status = status);
   }
 };
+

@@ -45,7 +45,7 @@ router.post("/register", async (req, res) => {
     const { accountId, password, nick } = req.body;
 
     // const regex = /^[a-z0-9]{4,}$/; //정규 표현식: 조건 알파벳과숫자로 이루어진 4글자 이상
-
+    
     //닉네임 체크
     const checkNick = await Users.findOne({ where: { nick } });
     if (checkNick) {
