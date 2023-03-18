@@ -1,60 +1,53 @@
 const express = require("express");
 const authmiddleware = require("../middlewares/auth-middleware");
+const CustomError = require("../middlewares/errorhandler.js")
 const router = express.Router();
 const axios = require("axios");
 const cheerio = require("cheerio");
-const { Posts } = require("../models");
+const { Posts , Users } = require("../models");
 const { Op } = require("sequelize");
 
 //게시글 조회api
 //localhost:3017
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const posts = await Posts.findAll({
-      attribute: [
-        "postId",
-        "accountId",
-        "nick",
-        "url",
-        "category",
-        "title",
-        "desc",
-        "createdAt",
-        "updatedAt",
-      ],
+      raw: true,
+      attributes: ["postId","User.accountId","User.nick","url","category","title","desc"],
       order: [["createdAt", "DESC"]],
+      include: [{
+        model: Users,
+        attributes: []
+    }]
     });
     res.status(200).json({ posts: posts });
   } catch (error) {
-    console.log(error.stack);
+    next(error)
     return res
       .status(400)
-      .json({ errorMessage: "게시글조회에 실패하였습니다." });
+      .json({ "errorMessage": "게시글조회에 실패하였습니다." });
   }
 });
 
 //게시글 생성 api
 //localhost:3017/post
-router.post("/post", authmiddleware, async (req, res) => {
+router.post("/post", authmiddleware, async (req, res, next) => {
   try {
     const { accountId, nick, userId } = res.locals.user;
     const { url: postUrl, title, category, desc } = req.body;
-    
+    console.log(title.length)
+
     if (!title) {
-      return res.status(410).json({ errorMessage: "title을 입력해주세요" });
+      throw new CustomError("title을 입력해주세요", 410);
     }
     if (!desc) {
-      return res.status(410).json({ errorMessage: "desc를 입력해주세요." });
+      throw new CustomError("desc를 입력해주세요.", 410);
     }
-    if (title > 50) {
-      return res
-        .status(412)
-        .json({ errorMessage: "게시글 제목이 형식이 올바르지않습니다." });
+    if (Number(title.length) > 50 || typeof title !== "string") {
+      throw new CustomError("게시글 제목이 형식이 올바르지않습니다.", 412);
     }
-    if (desc > 500) {
-      return res
-        .status(412)
-        .json({ errorMessage: "게시글 내용의 형식이 일치하지않습니다." });
+    if (Number(desc.length) > 500 || typeof desc !== "string") {
+      throw new CustomError("게시글 내용의 형식이 일치하지않습니다.", 412);
     }
 
     //url을 가지고 크롤링해오는 api
@@ -77,10 +70,8 @@ router.post("/post", authmiddleware, async (req, res) => {
 
     const now = new Date();
     const posts = await Posts.create({
-      accountId: accountId,
       userId: userId,
       url: imageUrl,
-      nick: nick,
       title,
       category,
       desc,
@@ -89,39 +80,32 @@ router.post("/post", authmiddleware, async (req, res) => {
       updatedAt: now,
     });
     if (!posts) {
-      return res
-        .status(412)
-        .json({ errorMessage: "데이터 형식이 올바르지 않습니다." });
+      throw new CustomError("데이터 형식이 올바르지 않습니다..", 412);
     }
     res
       .status(201)
-      .json({ posts: posts, Message: "게시글 작성에 성공하였습니다." });
+      .json({"message": "게시글 작성에 성공하였습니다." });
   } catch (error) {
-    console.log(error.stack);
+    next(error)
     return res
       .status(412)
-      .json({ errorMessage: "게시글 작성에 실패하였습니다." });
+      .json({ "errorMessage": "게시글 작성에 실패하였습니다." });
   }
-});
-
+})
 //게시글 삭제 api
 //localhost:3017/post/:post_id
-router.delete("/post/:post_id", authmiddleware, async (req, res) => {
+router.delete("/post/:post_id", authmiddleware, async (req, res, next) => {
   try {
     const { userId } = res.locals.user;
     const { post_id } = req.params;
-
+   
     const post = await Posts.findOne({ where: { post_id } });
     if (!post) {
-      return res
-        .status(404)
-        .json({ errorMessage: "게시글이 존재하지 않습니다." });
+      throw new CustomError("게시글이 존재하지 않습니다.", 404);
     } else if (post.userId !== userId) {
-      return res
-        .status(403)
-        .json({ errorMessage: "게시글의 삭제권한이 존재하지 않습니다." });
+      throw new CustomError("게시글의 삭제권한이 존재하지 않습니다.", 403);
     }
-
+    console.log(post)
     await Posts.destroy({
       where: {
         [Op.and]: [{ post_id }, { userId: userId }],
@@ -129,11 +113,10 @@ router.delete("/post/:post_id", authmiddleware, async (req, res) => {
     });
     return res.status(200).json({ Message: "게시글이 삭제되었습니다." });
   } catch (error) {
-    // console.log(error.stack);
+    next(error)
     return res
       .status(401)
-      .json({ errorMessage: "게시글이 정상적으로 삭제되지 않았습니다." });
+      .json({ "errorMessage": "게시글이 정상적으로 삭제되지 않았습니다." });
   }
 });
-
 module.exports = router;
