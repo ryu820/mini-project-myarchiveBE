@@ -24,7 +24,7 @@ router.get("/post", authmiddleware, async (req, res) => {
     });
     res.status(200).json({ posts: posts });
   } catch (error) {
-    console.log(err.stack);
+    console.log(error.stack);
     return res
       .status(400)
       .json({ errorMessage: "게시글조회에 실패하였습니다." });
@@ -95,7 +95,7 @@ router.post("/post", authmiddleware, async (req, res) => {
       .status(201)
       .json({ posts: posts, Message: "게시글 작성에 성공하였습니다." });
   } catch (error) {
-    console.log(err.stack);
+    console.log(error.stack);
     return res
       .status(412)
       .json({ errorMessage: "게시글 작성에 실패하였습니다." });
@@ -126,7 +126,7 @@ router.delete("/post/:postId", authmiddleware, async (req, res) => {
     });
     return res.status(200).json({ Message: "게시글이 삭제되었습니다." });
   } catch (error) {
-    console.log(err.stack);
+    console.log(error.stack);
     return res
       .status(401)
       .json({ errorMessage: "게시글이 정상적으로 삭제되지 않았습니다." });
