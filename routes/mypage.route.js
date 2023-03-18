@@ -26,4 +26,5 @@ router.get("/mypage", authmiddleware, async(req,res) => {
     
 })
 
+
 module.exports = router;
