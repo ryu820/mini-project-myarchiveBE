@@ -11,9 +11,6 @@ router.post('/register', async (req, res) => {
   try {
     const { accountId, password, confirm, nick } = req.body;
 
-    
-    
-    
     await Users.create({ accountId, password, nick });
 
     return res.status(201).json({ message: '회원가입이 완료되었습니다.' });
@@ -42,11 +39,11 @@ router.post('/login', async (req, res) => {
 
     //쿠키발급
     res.cookie('authorization', `Bearer ${token}`);
-    res.json("성공")
+    res.status(200).json({ token });
+
   } catch (err) {
     console.log(err);
   }
 });
-
 
 module.exports = router;
