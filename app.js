@@ -22,6 +22,13 @@ app.use("/", [postsRouter, usersRouter, MypageRouter]);
 //   })
 // );
 
+
+app.use((error,req,res,next) => {
+  console.error(error.stack)
+  res.status(error.status).json({"errorMessage": error.message || "예상치 못한 에러가 발생하였습니다."})
+})
+
+
 app.listen(PORT, () => {
   console.log(` http://localhost:${PORT} `);
 });
