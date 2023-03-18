@@ -13,13 +13,14 @@ app.use(cookieParser());
 
 app.use("/list", postsRouter);
 app.use("/", [usersRouter, MypageRouter]);
-app.use(
-  cors({
-    origin: "localhost:3017",
-    credentials: true,
-    optionsSuccessStatus: 200,
-  })
-);
+// app.use(
+//   cors({
+//     origin: "localhost:3017",
+//     credentials: true,
+//     optionsSuccessStatus: 200,
+//   })
+// );
+app.use(cors());
 
 app.listen(PORT, () => {
   console.log(` http://localhost:${PORT} `);
