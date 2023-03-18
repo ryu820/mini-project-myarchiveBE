@@ -7,7 +7,7 @@ const { Posts } = require("../models");
 const { Op } = require("sequelize");
 
 //게시글 조회api
-//localhost:3017/list
+//localhost:3017
 router.get("/", async (req, res) => {
   try {
     const posts = await Posts.findAll({
@@ -34,12 +34,12 @@ router.get("/", async (req, res) => {
 });
 
 //게시글 생성 api
-//localhost:3017/list/post
+//localhost:3017/post
 router.post("/post", authmiddleware, async (req, res) => {
   try {
     const { accountId, nick, userId } = res.locals.user;
     const { url: postUrl, title, category, desc } = req.body;
-
+    
     if (!title) {
       return res.status(410).json({ errorMessage: "title을 입력해주세요" });
     }
@@ -105,7 +105,7 @@ router.post("/post", authmiddleware, async (req, res) => {
 });
 
 //게시글 삭제 api
-//localhost:3017/list/post/:post_id
+//localhost:3017/post/:post_id
 router.delete("/post/:post_id", authmiddleware, async (req, res) => {
   try {
     const { userId } = res.locals.user;

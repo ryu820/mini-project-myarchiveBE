@@ -10,17 +10,21 @@ const env = process.env
 //localhost:3017//register/check-id
 router.post('/register/check-id', async (req, res) => {
   const { accountId } = req.body;
-  const checkId = await Users.findOne({ where: { accountId } });
-
-  if (checkId) {
-    return res
-      .status(412)
-      .json({ errorMessage: '중복된 아이디입니다.' });
+  try {
+    const checkId = await Users.findOne({ where: { accountId } });
+    if (checkId) {
+      return res
+        .status(412)
+        .json({ errorMessage: '중복된 아이디입니다.' });
+    } else {
+      return res
+        .status(200)
+        .json({ message: '사용가능한 아이디 입니다' });
+    }
+  } catch (err) {
+    return res.status(400).json({ errormessage: "알수없는 오류입니다." })
   }
 
-  return res
-    .status(200)
-    .json({ message: '사용가능한 아이디 입니다' });
 });
 
 
@@ -28,16 +32,22 @@ router.post('/register/check-id', async (req, res) => {
 //localhost:3017/register/check-nick
 router.post('/register/check-nick', async (req, res) => {
   const { nick } = req.body;
-  const checkNick = await Users.findOne({ where: { nick } });
-
-  if (checkNick) {
-    return res
-      .status(412)
-      .json({ errorMessage: '중복된 닉네임입니다.' });
+  try {
+    const checkNick = await Users.findOne({ where: { nick } });
+    if (checkNick) {
+      return res
+        .status(412)
+        .json({ errorMessage: '중복된 닉네임입니다.' });
+    } else {
+      return res
+        .status(200)
+        .json({ message: '사용가능한 닉네임 입니다' });
+    }
+  }catch(err){
+    return res.status(400).json({ errormessage: "알수없는 오류입니다." })
   }
-  return res
-    .status(200)
-    .json({ message: '사용가능한 닉네임 입니다' });
+  
+
 });
 
 
