@@ -3,6 +3,7 @@ const { Posts } = require("../models")
 const authmiddleware = require("../middlewares/auth-middleware.js")
 const router = express.Router();
 
+
 //유저 게시글 조회API
 router.get("/mypage", authmiddleware, async (req, res) => {
     try {
