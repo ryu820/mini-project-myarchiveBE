@@ -25,7 +25,6 @@ router.get("/mypage", authmiddleware, async (req, res) => {
             order :[['createdAt', 'DESC']]
         })
         const postslist = { done: donepostlist, notdone: notDonepostlist }
-        // const postslist_test= postslist.notdone
         res.status(200).json(postslist)
     } catch (err) {
         res.status(400).json({ "errorMessage": "게시글 조회에 실패하였습니다." })
