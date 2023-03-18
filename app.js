@@ -1,4 +1,3 @@
-
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const postsRouter = require("./routes/posts.route");

@@ -36,7 +36,7 @@ router.get('/post', authMiddleware, async (req, res) => {
 router.post('/post', authMiddleware, async (req, res) => {
   try {
     const { accountId, nick, userId } = res.locals.user;
-    const { url, title, category, desc, isDone } = req.body;
+    const { url, title, category, desc } = req.body;
 
     if (title > 50) {
       return res
@@ -57,7 +57,7 @@ router.post('/post', authMiddleware, async (req, res) => {
       title,
       category,
       desc,
-      isDone,
+      isDone:false,
       createdAt: now,
       updatedAt: now,
     });
