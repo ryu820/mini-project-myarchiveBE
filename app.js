@@ -8,19 +8,20 @@ const MypageRouter = require("./routes/mypage.route");
 const app = express();
 const PORT = 3017;
 
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: "*", //프론트의 url
+    credentials: true, //쿠키정책
+    optionsSuccessStatus: 200,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/", [postsRouter, usersRouter, MypageRouter]);
-// app.use(
-//   cors({
-//     origin: "localhost:3017",
-//     credentials: true,
-//     optionsSuccessStatus: 200,
-//   })
-// );
+
 
 
 app.use((error,req,res,next) => {
