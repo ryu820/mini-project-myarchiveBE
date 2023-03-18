@@ -14,7 +14,7 @@ router.get("/", async (req, res, next) => {
   try {
     const posts = await Posts.findAll({
       raw: true,
-      attributes: ["postId","User.accountId","User.nick","url","category","title","desc"],
+      attributes: ["post_Id","User.accountId","User.nick","url","category","title","desc"],
       order: [["createdAt", "DESC"]],
       include: [{
         model: Users,
@@ -34,7 +34,7 @@ router.get("/", async (req, res, next) => {
 //localhost:3017/post
 router.post("/post", authmiddleware, async (req, res, next) => {
   try {
-    const { accountId, nick, userId } = res.locals.user;
+    const { userId } = res.locals.user;
     const { url: postUrl, title, category, desc } = req.body;
 
     if (!title) {
@@ -72,11 +72,11 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     const now = new Date();
     const posts = await Posts.create({
       userId: userId,
-      url: imageUrl,
+      url: postUrl, //나중에 고치기!!!!!!!!!!
       title,
       category,
       desc,
-      isDone,
+      isDone: false,
       createdAt: now,
       updatedAt: now,
     });
@@ -111,10 +111,10 @@ router.delete("/post/:post_id", authmiddleware, async (req, res, next) => {
     console.log(post)
     await Posts.destroy({
       where: {
-        [Op.and]: [{ postId }, { userId: userId }],
+        [Op.and]: [{ post_id }, { userId: userId }],
       },
     });
-    return res.status(200).json({ Message: "게시글이 삭제되었습니다." });
+    return res.status(200).json({ "message": "게시글이 삭제되었습니다." });
   } catch (error) {
     next(error)
     return res
