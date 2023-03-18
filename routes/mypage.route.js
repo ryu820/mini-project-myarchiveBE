@@ -5,6 +5,7 @@ const router = express.Router();
 
 
 //유저 게시글 조회API
+//localhost:3017/mypage
 router.get("/mypage", authmiddleware, async (req, res) => {
     try {
         const { userId } = res.locals.user;
