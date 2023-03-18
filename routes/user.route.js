@@ -6,10 +6,8 @@ const { Users } = require('../models');
 require("dotenv").config();
 const env = process.env
 
-
-/**
- * ★ 회원가입 아이디 중복확인
- */
+//회원가입 아이디 중복확인
+//localhost:3017//register/check-id
 router.post('/register/check-id', async (req, res) => {
   const { accountId } = req.body;
   const checkId = await Users.findOne({ where: { accountId } });
@@ -25,9 +23,9 @@ router.post('/register/check-id', async (req, res) => {
     .json({ message: '사용가능한 아이디 입니다' });
 });
 
-/**
- * ★ 회원가입 닉네임 중복확인
- */
+
+//회원가입 닉네임 중복확인
+//localhost:3017/register/check-nick
 router.post('/register/check-nick', async (req, res) => {
   const { nick } = req.body;
   const checkNick = await Users.findOne({ where: { nick } });
@@ -42,9 +40,9 @@ router.post('/register/check-nick', async (req, res) => {
     .json({ message: '사용가능한 닉네임 입니다' });
 });
 
-/**
- * ★회원가입
- */
+
+//회원가입API
+//localhost:3017/register
 router.post('/register', async (req, res) => {
   try {
     const { accountId, password, confirm, nick } = req.body;
@@ -113,10 +111,10 @@ router.post('/register', async (req, res) => {
       .json({ errorMessage: '요청한 데이터 형식이 올바르지 않습니다.' });
   }
 });
-function test() {}
-/**
- * ★로그인
- */
+
+
+//로그인 API
+//localhost:3017/login
 router.post('/login', async (req, res) => {
   try {
     const { accountId, password } = req.body;
@@ -149,24 +147,5 @@ router.post('/login', async (req, res) => {
   }
 });
 
-//★마스터 로그인
-const authMiddleware = require('../middlewares/auth-middleware');
-router.get('/master', authMiddleware, async (req, res) => {
-  const { accountId } = res.locals.user;
-
-  if (accountId != 'master') {
-    return res.send('권한이 없습니다');
-  }
-
-  let user = await Users.findAll({});
-
-  user = user.map((value) => {
-    return {
-      accountId: value.accountId,
-    };
-  });
-
-  return res.json(user);
-});
 
 module.exports = router;
