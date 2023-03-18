@@ -14,7 +14,7 @@ router.get("/", async (req, res, next) => {
   try {
     const posts = await Posts.findAll({
       raw: true,
-      attributes: ["post_Id","User.accountId","User.nick","url","category","title","desc"],
+      attributes: ["post_Id","User.accountId","User.nick","url","category","title","desc","isDone"],
       order: [["createdAt", "DESC"]],
       include: [{
         model: Users,
