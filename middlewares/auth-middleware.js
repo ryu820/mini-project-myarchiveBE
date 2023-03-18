@@ -3,6 +3,7 @@ const { Users } = require("../models");
 require("dotenv").config();
 const env = process.env;
 
+
 module.exports = async (req, res, next) => {
   try {
     const { authorization } = req.cookies;
@@ -15,7 +16,6 @@ module.exports = async (req, res, next) => {
     }
 
     const decodedToken = jwt.verify(token, env.SECRET_KEY);
-
     const userId = decodedToken.userId;
 
     const user = await Users.findOne({ where: { userId } });

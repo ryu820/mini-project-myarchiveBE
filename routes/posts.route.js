@@ -35,7 +35,8 @@ router.get("/post", authmiddleware, async (req, res) => {
 router.post("/post", authmiddleware, async (req, res) => {
   try {
     const { accountId, nick, userId } = res.locals.user;
-    const { url: postUrl, title, category, desc, isDone } = req.body;
+    const { url: postUrl, title, category, desc } = req.body;
+
 
     if (!title) {
       return res.status(410).json({ errorMessage: "title을 입력해주세요" });
@@ -82,7 +83,7 @@ router.post("/post", authmiddleware, async (req, res) => {
       title,
       category,
       desc,
-      isDone,
+      isDone:false,
       createdAt: now,
       updatedAt: now,
     });
