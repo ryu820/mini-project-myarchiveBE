@@ -40,6 +40,7 @@ router.post('/login', async (req, res) => {
     //쿠키발급
     res.cookie('authorization', `Bearer ${token}`);
     res.status(200).json({ token });
+
   } catch (err) {
     console.log(err);
   }

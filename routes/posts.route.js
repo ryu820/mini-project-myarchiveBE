@@ -5,6 +5,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const { Posts } = require('../models');
 
+
 //게시글 조회api
 router.get('/post', authMiddleware, async (req, res) => {
   try {
@@ -29,6 +30,7 @@ router.get('/post', authMiddleware, async (req, res) => {
       .json({ errorMessage: '게시글조회에 실패하였습니다.' });
   }
 });
+
 
 //게시글 생성 api
 router.post('/post', authMiddleware, async (req, res) => {
@@ -73,6 +75,7 @@ router.post('/post', authMiddleware, async (req, res) => {
       .json({ errorMessage: '게시글 작성에 실패하였습니다.' });
   }
 });
+
 
 //게시글 삭제 api
 router.delete('/post/:postId', authMiddleware, async (req, res) => {
