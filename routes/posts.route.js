@@ -6,7 +6,7 @@ const cheerio = require("cheerio");
 const { Posts } = require("../models");
 
 //게시글 조회api
-router.get("/post", authmiddleware, async (req, res) => {
+router.get("/post", async (req, res) => {
   try {
     const posts = await Posts.findAll({
       attribute: [
@@ -36,7 +36,6 @@ router.post("/post", authmiddleware, async (req, res) => {
   try {
     const { accountId, nick, userId } = res.locals.user;
     const { url: postUrl, title, category, desc } = req.body;
-
 
     if (!title) {
       return res.status(410).json({ errorMessage: "title을 입력해주세요" });
@@ -82,7 +81,7 @@ router.post("/post", authmiddleware, async (req, res) => {
       title,
       category,
       desc,
-      isDone:false,
+      isDone: false,
       createdAt: now,
       updatedAt: now,
     });
