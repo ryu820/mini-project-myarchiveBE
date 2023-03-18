@@ -36,6 +36,7 @@ router.post('/register', async (req, res) => {
   try {
     const { accountId, password, confirm, nick } = req.body;
 
+
     if(!regex.test(accountId)){ 
       console.log(accountId + " = 형식이 일치하지 않습니다");
       res.status(412).json({"errorMessage": "닉네임의 형식이 일치하지 않습니다."});
@@ -82,6 +83,7 @@ router.post('/login', async (req, res) => {
 
     //쿠키발급
     res.cookie('authorization', `Bearer ${token}`);
+    res.status(200).json({ token });
   } catch (err) {
     console.log(err);
   }
