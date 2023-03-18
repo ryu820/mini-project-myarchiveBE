@@ -100,8 +100,8 @@ router.post("/post", authmiddleware, async (req, res, next) => {
   }
 });
 //게시글 삭제 api
-//localhost:3017/post/:post_id
-router.delete("/post/:post_id", authmiddleware, async (req, res, next) => {
+//localhost:3017/post/:postId
+router.delete("/post/:postId", authmiddleware, async (req, res, next) => {
   try {
     const { userId } = res.locals.user;
     const { post_id } = req.params;
@@ -116,7 +116,7 @@ router.delete("/post/:post_id", authmiddleware, async (req, res, next) => {
     console.log(post);
     await Posts.destroy({
       where: {
-        [Op.and]: [{ post_id }, { userId: userId }],
+        [Op.and]: [{ postId }, { userId: userId }],
       },
     });
     return res.status(200).json({ message: "게시글이 삭제되었습니다." });
