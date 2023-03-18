@@ -4,6 +4,7 @@ const router = express.Router();
 const axios = require("axios");
 const cheerio = require("cheerio");
 const { Posts } = require("../models");
+const { Op } = require("sequelize");
 
 //게시글 조회api
 router.get("/post", async (req, res) => {
@@ -24,7 +25,7 @@ router.get("/post", async (req, res) => {
     });
     res.status(200).json({ posts: posts });
   } catch (error) {
-    console.log(err.stack);
+    console.log(error.stack);
     return res
       .status(400)
       .json({ errorMessage: "게시글조회에 실패하였습니다." });
@@ -94,7 +95,7 @@ router.post("/post", authmiddleware, async (req, res) => {
       .status(201)
       .json({ posts: posts, Message: "게시글 작성에 성공하였습니다." });
   } catch (error) {
-    console.log(err.stack);
+    console.log(error.stack);
     return res
       .status(412)
       .json({ errorMessage: "게시글 작성에 실패하였습니다." });
@@ -103,33 +104,33 @@ router.post("/post", authmiddleware, async (req, res) => {
 
 //게시글 삭제 api
 router.delete("/post/:postId", authmiddleware, async (req, res) => {
-  try {
-    const { userId } = res.locals.user;
-    const { postId } = req.params;
+  // try {
+  const { userId } = res.locals.user;
+  const { postId } = req.params;
 
-    const post = await Posts.findOne({ where: { postId } });
-    if (!post) {
-      return res
-        .status(404)
-        .json({ errorMessage: "게시글이 존재하지 않습니다." });
-    } else if (post.userId !== userId) {
-      return res
-        .status(403)
-        .json({ errorMessage: "게시글의 삭제권한이 존재하지 않습니다." });
-    }
-
-    await Posts.destroy({
-      where: {
-        [Op.and]: [{ postId }, { userId: userId }],
-      },
-    });
-    return res.status(200).json({ Message: "게시글이 삭제되었습니다." });
-  } catch (error) {
-    console.log(err.stack);
+  const post = await Posts.findOne({ where: { postId } });
+  if (!post) {
     return res
-      .status(401)
-      .json({ errorMessage: "게시글이 정상적으로 삭제되지 않았습니다." });
+      .status(404)
+      .json({ errorMessage: "게시글이 존재하지 않습니다." });
+  } else if (post.userId !== userId) {
+    return res
+      .status(403)
+      .json({ errorMessage: "게시글의 삭제권한이 존재하지 않습니다." });
   }
+
+  await Posts.destroy({
+    where: {
+      [Op.and]: [{ postId }, { userId: userId }],
+    },
+  });
+  return res.status(200).json({ Message: "게시글이 삭제되었습니다." });
+  // } catch (error) {
+  //   // console.log(error.stack);
+  //   return res
+  //     .status(401)
+  //     .json({ errorMessage: "게시글이 정상적으로 삭제되지 않았습니다." });
+  // }
 });
 
 module.exports = router;

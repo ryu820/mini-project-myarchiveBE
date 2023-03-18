@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const postsRouter = require("./routes/posts.route");
 const usersRouter = require("./routes/user.route");
@@ -11,7 +12,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/list", postsRouter);
-app.use('/',[usersRouter,MypageRouter]);
+app.use("/", [usersRouter, MypageRouter]);
+app.use(
+  cors({
+    origin: "localhost:3017",
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 
 app.listen(PORT, () => {
   console.log(` http://localhost:${PORT} `);
