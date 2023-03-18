@@ -1,14 +1,12 @@
 const express = require("express");
-const authmiddleware = require("../middlewares/auth-middleware");
+const authMiddleware = require("../middlewares/auth-middleware");
 const router = express.Router();
 const axios = require("axios");
 const cheerio = require("cheerio");
 const { Posts } = require("../models");
-const { Op } = require("sequelize");
 
 //게시글 조회api
-//localhost:3017
-router.get("/", async (req, res) => {
+router.get("/post", authMiddleware, async (req, res) => {
   try {
     const posts = await Posts.findAll({
       attribute: [
@@ -34,12 +32,10 @@ router.get("/", async (req, res) => {
 });
 
 //게시글 생성 api
-//localhost:3017/post
-router.post("/post", authmiddleware, async (req, res) => {
+router.post("/post", authMiddleware, async (req, res) => {
   try {
     const { accountId, nick, userId } = res.locals.user;
-    const { url: postUrl, title, category, desc } = req.body;
-    
+    const { url: postUrl, title, category, desc, isDone } = req.body;
     if (!title) {
       return res.status(410).json({ errorMessage: "title을 입력해주세요" });
     }
@@ -60,20 +56,21 @@ router.post("/post", authmiddleware, async (req, res) => {
     //url을 가지고 크롤링해오는 api
 
     //axios모듈을 사용해서 postUrl로 get요청을 보내 HTML데이터를 가져온다.
-    //$에 cheerio모듈로 파싱해온 HTML데이터를 할당한다
-    //img mainImg의 src에 붙어있는 url을 가져온다.
-    //url이 존재하지 않으면
-    //메타태그의 og:image의 content에 적힌 url을 가져온다
-    //값이 없다면 undefined
-    const response = await axios.get(postUrl);
-    const $ = cheerio.load(response.data);
-    let imageUrl = $("img#mainImg").attr("src");
+    // const response = await axios.get(postUrl);
+    // //$에 cheerio모듈로 파싱해온 HTML데이터를 할당한다
+    // const $ = cheerio.load(response.data);
+    // //img mainImg의 src에 붙어있는 url을 가져온다.
+    // let imageUrl = $("img#mainImg").attr("src");
+    // console.log(imageUrl);
 
-    if (!imageUrl || imageUrl === undefined) {
-      imageUrl = $('meta[property="og:image"]').attr("content");
-    } else {
-      imageUrl = undefined;
-    }
+    // //url이 존재하지 않으면
+    // if (!imageUrl || imageUrl === undefined) {
+    //   //메타태그의 og:image의 content에 적힌 url을 가져온다
+    //   imageUrl = $('meta[property="og:image"]').attr("content");
+    // } else {
+    //   //값이 없다면 undefined
+    //   let imageUrl = undefined;
+    // }
 
     const now = new Date();
     const posts = await Posts.create({
@@ -84,7 +81,7 @@ router.post("/post", authmiddleware, async (req, res) => {
       title,
       category,
       desc,
-      isDone: false,
+      isDone,
       createdAt: now,
       updatedAt: now,
     });
@@ -94,7 +91,7 @@ router.post("/post", authmiddleware, async (req, res) => {
         .json({ errorMessage: "데이터 형식이 올바르지 않습니다." });
     }
     res
-      .status(201)
+      .status(200)
       .json({ posts: posts, Message: "게시글 작성에 성공하였습니다." });
   } catch (error) {
     console.log(error.stack);
@@ -105,13 +102,12 @@ router.post("/post", authmiddleware, async (req, res) => {
 });
 
 //게시글 삭제 api
-//localhost:3017/post/:post_id
-router.delete("/post/:post_id", authmiddleware, async (req, res) => {
+router.delete("/post/:postId", authMiddleware, async (req, res) => {
   try {
     const { userId } = res.locals.user;
-    const { post_id } = req.params;
+    const { postId } = req.params;
 
-    const post = await Posts.findOne({ where: { post_id } });
+    const post = await Posts.findOne({ where: { postId } });
     if (!post) {
       return res
         .status(404)
@@ -124,14 +120,14 @@ router.delete("/post/:post_id", authmiddleware, async (req, res) => {
 
     await Posts.destroy({
       where: {
-        [Op.and]: [{ post_id }, { userId: userId }],
+        [Op.and]: [{ postId }, { userId: userId }],
       },
     });
     return res.status(200).json({ Message: "게시글이 삭제되었습니다." });
   } catch (error) {
-    // console.log(error.stack);
+    console.log(error.stack);
     return res
-      .status(401)
+      .status(400)
       .json({ errorMessage: "게시글이 정상적으로 삭제되지 않았습니다." });
   }
 });

@@ -22,6 +22,11 @@ app.use("/", [postsRouter, usersRouter, MypageRouter]);
 //   })
 // );
 
+app.use((error, req, res, next) => {
+  console.error(error.stack);
+  res.status(error.status).json(error.message);
+});
+
 app.listen(PORT, () => {
   console.log(` http://localhost:${PORT} `);
 });
