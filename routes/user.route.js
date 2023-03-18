@@ -55,7 +55,8 @@ router.post('/register/check-nick', async (req, res) => {
 //localhost:3017/register
 router.post('/register', async (req, res) => {
   try {
-    const { accountId, password, confirm, nick } = req.body;
+    const { accountId, password, nick } = req.body;
+
     // const regex = /^[a-z0-9]{4,}$/; //정규 표현식: 조건 알파벳과숫자로 이루어진 4글자 이상
 
 
@@ -92,11 +93,6 @@ router.post('/register', async (req, res) => {
 
 
     //비밀번호 체크
-    if (password != confirm) {
-      return res
-        .status(412)
-        .json({ errorMessage: '패스워드가 일치하지 않습니다.' });
-    }
 
     if (!regex.test(password)) {
       console.log(password + ' = 형식이 일치하지 않습니다');
