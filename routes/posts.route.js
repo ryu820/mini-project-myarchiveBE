@@ -7,7 +7,7 @@ const { Posts } = require("../models");
 const { Op } = require("sequelize");
 
 //게시글 조회api
-router.get("/post", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const posts = await Posts.findAll({
       attribute: [
