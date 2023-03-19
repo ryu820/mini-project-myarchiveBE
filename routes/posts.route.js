@@ -68,19 +68,20 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     //값이 없다면 undefined
     let imageUrl;
 
-    if (!postUrl) {
+    if (postUrl) {
       const response = await axios.get(postUrl); //이거 두개 if로 걸러주고
-      const $ = cheerio.load(response.data);
+      $ = cheerio.load(response.data);
+      imageUrl =
+        $("img#mainImg").attr("src") ||
+        $('meta[property="og:image"]').attr("content");
     } else {
-      imageUrl = $("img#mainImg").attr("src");
-      imageUrl = $('meta[property="og:image"]').attr("content");
-      imageUrl = undefined;
+      undefined;
     }
 
     const now = new Date();
     const posts = await Posts.create({
       userId: userId,
-      url: imageUrl, //나중에 고치기!!!!!!!!!!
+      url: imageUrl,
       title,
       category,
       desc,
