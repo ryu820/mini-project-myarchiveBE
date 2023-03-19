@@ -127,7 +127,7 @@ router.post("/login", async (req, res) => {
     res.cookie('authorization', `Bearer ${token}`, {expires: expires,});
     */
 
-    
+    //토큰 오류 찾아봐야함
     //jwt생성
     const token = jwt.sign({ userId: user.userId }, env.SECRET_KEY);
     //쿠키발급
