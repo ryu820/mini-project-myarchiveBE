@@ -20,7 +20,6 @@ router.get("/", async (req, res, next) => {
         "url",
         "category",
         "title",
-        "desc",
       ],
       include: [
         {
@@ -70,7 +69,7 @@ router.post("/post", authmiddleware, async (req, res, next) => {
 
     if (postUrl) {
       const response = await axios.get(postUrl); //이거 두개 if로 걸러주고
-      $ = cheerio.load(response.data);
+      let $ = cheerio.load(response.data);
       imageUrl =
         $("img#mainImg").attr("src") ||
         $('meta[property="og:image"]').attr("content");
