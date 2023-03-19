@@ -14,7 +14,7 @@ router.get("/", async (req, res, next) => {
     const posts = await Posts.findAll({
       raw: true,
       attributes: [
-        "post_Id",
+        "postId",
         "User.accountId",
         "User.nick",
         "url",
@@ -105,9 +105,9 @@ router.post("/post", authmiddleware, async (req, res, next) => {
 router.delete("/post/:postId", authmiddleware, async (req, res, next) => {
   try {
     const { userId } = res.locals.user;
-    const { post_id } = req.params;
+    const { postId } = req.params;
 
-    const post = await Posts.findOne({ where: { post_id } });
+    const post = await Posts.findOne({ where: { postId } });
 
     if (!post) {
       throw new CustomError("게시글이 존재하지 않습니다.", 404);
