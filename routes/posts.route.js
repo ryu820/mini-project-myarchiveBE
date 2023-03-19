@@ -10,32 +10,32 @@ const { Op } = require("sequelize");
 //게시글 조회api
 //localhost:3017
 router.get("/", async (req, res, next) => {
-  // try {
-  const posts = await Posts.findAll({
-    raw: true,
-    attributes: [
-      "postId",
-      "User.accountId",
-      "User.nick",
-      "url",
-      "category",
-      "title",
-      "desc",
-    ],
-    include: [
-      {
-        model: Users,
-        attributes: [],
-      },
-    ],
-  });
-  res.status(200).json({ posts: posts });
-  // } catch (error) {
-  //   next(error);
-  //   return res
-  //     .status(400)
-  //     .json({ errorMessage: "게시글조회에 실패하였습니다." });
-  // }
+  try {
+    const posts = await Posts.findAll({
+      raw: true,
+      attributes: [
+        "postId",
+        "User.accountId",
+        "User.nick",
+        "url",
+        "category",
+        "title",
+        "desc",
+      ],
+      include: [
+        {
+          model: Users,
+          attributes: [],
+        },
+      ],
+    });
+    res.status(200).json({ posts: posts });
+  } catch (error) {
+    next(error);
+    return res
+      .status(400)
+      .json({ errorMessage: "게시글조회에 실패하였습니다." });
+  }
 });
 
 //게시글 생성 api
