@@ -112,6 +112,16 @@ router.post("/login", async (req, res) => {
         .json({ errorMessage: "비밀번호가 일치하지 않습니다." });
     }
 
+    let expires = new Date();
+    expires.setMinutes(expires.getMinutes() + 60);
+    const token = jwt.sign(
+      { accountId: user.accountId, nick: user.nick },
+      env.SECRET_KEY,
+      { expiresIn: "1h" }
+    );
+    // res.header("token", token).send();  //토큰값을  body가 아닌 해더에 보내준다
+    res.header("authorization", `Bearer ${token}`); //토큰값을  body가 아닌 해더에 보내준다
+
     res.status(200).send("완료되었습니다"); //body token 값을 보내주면 보안을 위해 삭제
     
   } catch (err) {
@@ -121,14 +131,14 @@ router.post("/login", async (req, res) => {
 });
 
 const authmiddleware = require("../middlewares/auth-middleware");
-//미들웨어 확인용
 router.get("/testServer", authmiddleware, (req, res) => {
   try {
     res.send("통과하였습니다");
-
-  }catch(err) { 
-
+    // console.log({token});
+    res.status(200).json({ token });
+  } catch (err) {
 
   }
 });
+
 module.exports = router;
