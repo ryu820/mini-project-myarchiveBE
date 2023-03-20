@@ -120,14 +120,11 @@ router.post("/login", async (req, res) => {
         .json({ errorMessage: "비밀번호가 일치하지 않습니다." });
     }
 
-    let expires = new Date();
-    expires.setMinutes(expires.getMinutes() + 60);
-
     const token = jwt.sign(
       { accountId: user.accountId, nick: user.nick },
       env.SECRET_KEY,
       //만료시간 설정
-      // { expiresIn: "10s" }
+      // { expiresIn: "5s" }
       );
 
     // res.header("token", token).send();  //토큰값을  body가 아닌 해더에 보내준다
@@ -136,7 +133,7 @@ router.post("/login", async (req, res) => {
 
 
     // res.status(200).send("완료되었습니다"); //body token 값을 보내주면 보안을 위해 삭제
-    res.status(400).json( user.nick );
+    res.status(200).json( user.nick );
   } catch (err) {
     console.log(err);
     res.status(400).json({ errorMessage: "로그인에 실패하였습니다." });
