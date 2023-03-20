@@ -1,4 +1,6 @@
 const express = require("express");
+const axios = require("axios");
+const cheerio = require("cheerio");
 const { Posts } = require("../models");
 const authmiddleware = require("../middlewares/auth-middleware.js");
 const CustomError = require("../middlewares/errorhandler");
@@ -45,7 +47,8 @@ router.get("/mypage", authmiddleware, async (req, res) => {
     });
     const postslist = { done: donepostlist, notdone: notDonepostlist };
     res.status(200).json(postslist);
-  } catch (err) {
+  } catch (error) {
+    next(error)
     res.status(400).json({ errorMessage: "게시글 조회에 실패하였습니다." });
   }
 });
@@ -55,7 +58,7 @@ router.get("/mypage", authmiddleware, async (req, res) => {
 router.put("/post/:postId", authmiddleware, async (req, res, next) => {
   const { userId } = res.locals.user;
   const { postId } = req.params;
-  const { url, title, desc } = req.body;
+  const { url: postUrl, title, desc } = req.body;
   try {
     const existPost = await Posts.findOne({
       where: {
@@ -71,11 +74,29 @@ router.put("/post/:postId", authmiddleware, async (req, res, next) => {
     if (userId !== existPost.userId) {
       throw new CustomError("게시글 수정의 권한이 존재하지 않습니다.", 403)
     }
+    //url 수정
+    let imageUrl;
+
+    if (postUrl) {
+      const response = await axios.get(postUrl); //이거 두개 if로 걸러주고
+      let $ = cheerio.load(response.data);
+      imageUrl =
+        $("img#mainImg").attr("src") ||
+        $('meta[property="og:image"]').attr("content");
+    } else {
+      undefined;
+    }
     //수정 업데이트
-    await Posts.update({ url, title, desc }, { where: { postId, userId } })
+    await Posts.update({
+      url: postUrl,
+      img: imageUrl,
+      title,
+      desc
+    }, { where: { postId, userId } })
     res.status(200).json({ "message": "게시글을 수정하였습니다." })
   } catch (error) {
     next(error)
+    res.status(401).json({ "errorMessage": "게시글이 정상적으로 수정되지 않았습니다." })
   }
 
 })
@@ -101,9 +122,9 @@ router.put("/mypage/:postId", authmiddleware, async (req, res, next) => {
       await Posts.update({ isDone: done }, { where: { postId, userId } })
       return res.status(200).json({ "message": "구매리스트에서 위시리스트로 이동하였습니다." })
     }
-  }catch(error){
+  } catch (error) {
     next(error)
-    res.status(401).json({"errorMessage": "게시글이 정상적으로 수정되지 않았습니다."})
+    res.status(401).json({ "errorMessage": "게시글이 정상적으로 수정되지 않았습니다." })
   }
 })
 
