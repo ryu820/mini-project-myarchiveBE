@@ -81,8 +81,8 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     const now = new Date();
     const posts = await Posts.create({
       userId: userId,
-      url: imageUrl,
-      // img: imageUrl,
+      url: postUrl,
+      img: imageUrl,
       title,
       category,
       desc,
