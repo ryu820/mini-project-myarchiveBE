@@ -11,8 +11,8 @@
 
 ## ✔사용한 라이브러리
 ``` JS
-npm i cookie-parser dotenv express sequelize jsonwebtoken mysql2 prettier
-npm i -D sequelize-cli nodemon
+npm i cookie-parser dotenv express sequelize jsonwebtoken mysql2 prettier cors
+npm i -D sequelize-cli nodemon axios cheerio
 ```
 ## ✔프로젝트 구조
 ```text
@@ -21,6 +21,7 @@ npm i -D sequelize-cli nodemon
       config.js
   ▼ middlewares
     auth-middleware.js
+    errorhandler.js
   ▼ migrations
     20230317051016-create-users.js
     20230317051017-create-posts.js
@@ -29,6 +30,7 @@ npm i -D sequelize-cli nodemon
     posts.js
     users.js
   ▼ routes
+    detail.route.js
     posts.route.js
     users.route.js
     index.route.js

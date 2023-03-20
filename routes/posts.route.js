@@ -14,13 +14,13 @@ router.get("/", async (req, res, next) => {
     const posts = await Posts.findAll({
       raw: true,
       attributes: [
-        "post_Id",
+        "postId",
         "User.accountId",
         "User.nick",
         "url",
+        "img",
         "category",
         "title",
-        "desc",
       ],
       include: [
         {
@@ -68,19 +68,21 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     //값이 없다면 undefined
     let imageUrl;
 
-    if (!postUrl) {
+    if (postUrl) {
       const response = await axios.get(postUrl); //이거 두개 if로 걸러주고
-      const $ = cheerio.load(response.data);
+      let $ = cheerio.load(response.data);
+      imageUrl =
+        $("img#mainImg").attr("src") ||
+        $('meta[property="og:image"]').attr("content");
     } else {
-      imageUrl = $("img#mainImg").attr("src");
-      imageUrl = $('meta[property="og:image"]').attr("content");
-      imageUrl = undefined;
+      undefined;
     }
 
     const now = new Date();
     const posts = await Posts.create({
       userId: userId,
-      url: imageUrl, //나중에 고치기!!!!!!!!!!
+      url: imageUrl,
+      // img: imageUrl,
       title,
       category,
       desc,
@@ -91,7 +93,7 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     if (!posts) {
       throw new CustomError("데이터 형식이 올바르지 않습니다..", 412);
     }
-    res.status(201).json({ message: "게시글 작성에 성공하였습니다." });
+    res.status(201).json({ posts, message: "게시글 작성에 성공하였습니다." });
   } catch (error) {
     next(error);
     return res
@@ -104,16 +106,15 @@ router.post("/post", authmiddleware, async (req, res, next) => {
 router.delete("/post/:postId", authmiddleware, async (req, res, next) => {
   try {
     const { userId } = res.locals.user;
-    const { post_id } = req.params;
+    const { postId } = req.params;
 
-    const post = await Posts.findOne({ where: { post_id } });
+    const post = await Posts.findOne({ where: { postId } });
 
     if (!post) {
       throw new CustomError("게시글이 존재하지 않습니다.", 404);
     } else if (post.userId !== userId) {
       throw new CustomError("게시글의 삭제권한이 존재하지 않습니다.", 403);
     }
-    console.log(post);
     await Posts.destroy({
       where: {
         [Op.and]: [{ postId }, { userId: userId }],
