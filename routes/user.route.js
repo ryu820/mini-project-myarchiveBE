@@ -122,8 +122,8 @@ router.post("/login", async (req, res) => {
     const token = jwt.sign({ userId: user.userId }, env.SECRET_KEY);
 
     //쿠키발급
-    res.cookie("authorization", `Bearer ${token}`);
-    res.status(200).json({ token });
+    res.cookie("authorization", `Bearer ${token}`); //cookie -> 확실하게 헤더에 들어가는건지? ok 프론트에서 확인하려면 뭔가 해줘야된다....
+    res.status(200).json({ token }); //body ->지양 보안상 취약 탈취위험 
   } catch (err) {
     console.log(err);
     res.status(400).json({ errorMessage: "로그인에 실패하였습니다." });
