@@ -36,6 +36,12 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue:
           "http://img2.tmon.kr/cdn3/deals/2020/01/29/2871459710/2871459710_front_309d9b16a1.jpg",
       },
+      img: {
+        allowNull: true,
+        type: DataTypes.STRING,
+        defaultValue:
+          "http://img2.tmon.kr/cdn3/deals/2020/01/29/2871459710/2871459710_front_309d9b16a1.jpg",
+      },
       title: {
         allowNull: false,
         type: DataTypes.STRING,

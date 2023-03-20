@@ -2,7 +2,7 @@ const express = require("express");
 const authmiddleware = require("../middlewares/auth-middleware");
 const CustomError = require("../middlewares/errorhandler");
 const router = express.Router();
-const { Posts, Comments } = require("../models");
+const { Posts, Comments, Users } = require("../models");
 const { Op } = require("sequelize");
 
 //게시물 단일조회
@@ -25,8 +25,23 @@ router.get("/:postId/comments", async (req, res) => {
   //try{
   const comments = await Comments.findOne({
     where: { postId },
-    attributes: ["commentId", "comment"],
+    attributes: [
+      "commentId",
+      "postId",
+      "User.nick",
+      "comment",
+      "createdAt",
+      "updatedAt",
+    ],
+    raw: true,
+    include: [
+      {
+        model: Users,
+        attributes: [],
+      },
+    ],
   });
+  res.status(200).json({ comments });
   //   }catch(error) {
 
   //   }
@@ -47,7 +62,7 @@ router.post("/:postId/comments", authmiddleware, async (req, res) => {
     createdAt: now,
     updatedAt: now,
   });
-  res.status(200).json({ message: "댓글 작성에 성공하였습니다." });
+  res.status(200).json({ comments, message: "댓글 작성에 성공하였습니다." });
 });
 
 //댓글 삭제
@@ -61,7 +76,7 @@ router.delete(
 
     await Comments.destroy({
       where: {
-        [Op.and]: [{ postId }, { userId }],
+        [Op.and]: [{ postId }, { userId }, { commentId }],
       },
     });
     return res.status(200).json({ message: "댓글 삭제에 성공하였습니다." });

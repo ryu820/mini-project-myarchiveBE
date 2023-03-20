@@ -18,6 +18,7 @@ router.get("/", async (req, res, next) => {
         "User.accountId",
         "User.nick",
         "url",
+        "img",
         "category",
         "title",
       ],
@@ -81,6 +82,7 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     const posts = await Posts.create({
       userId: userId,
       url: imageUrl,
+      // img: imageUrl,
       title,
       category,
       desc,
@@ -91,7 +93,7 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     if (!posts) {
       throw new CustomError("데이터 형식이 올바르지 않습니다..", 412);
     }
-    res.status(201).json({ message: "게시글 작성에 성공하였습니다." });
+    res.status(201).json({ posts, message: "게시글 작성에 성공하였습니다." });
   } catch (error) {
     next(error);
     return res
@@ -113,7 +115,6 @@ router.delete("/post/:postId", authmiddleware, async (req, res, next) => {
     } else if (post.userId !== userId) {
       throw new CustomError("게시글의 삭제권한이 존재하지 않습니다.", 403);
     }
-    console.log(post);
     await Posts.destroy({
       where: {
         [Op.and]: [{ postId }, { userId: userId }],
