@@ -90,6 +90,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
+
 //로그인 API
 //localhost:3017/login
 router.post("/login", async (req, res) => {
@@ -114,31 +115,15 @@ router.post("/login", async (req, res) => {
 
     let expires = new Date();
     expires.setMinutes(expires.getMinutes() + 60);
+    const token = jwt.sign({ accountId: user.accountId, nick : user.nick }, env.SECRET_KEY, {expiresIn: "1h",});
+    // res.header("token", token).send();  //토큰값을  body가 아닌 해더에 보내준다
+    res.header("token", token);  //토큰값을  body가 아닌 해더에 보내준다
 
-    //토큰 유효시간 1시간으로 설정
-    // const token = jwt.sign({ userId: user.userId }, env.SECRET_KEY, {
-    //   expiresIn: "1h",
-    // });
-    // res.cookie("authorization", `Bearer ${token}`, { expires: expires });
-
-    // //jwt생성
-     const token = jwt.sign({ userId: user.userId }, env.SECRET_KEY);
-    // //쿠키발급
-     res.cookie("authorization", `Bearer ${token}`); //cookie -> 확실하게 헤더에 들어가는건지? ok 프론트에서 확인하려면 뭔가 해줘야된다....
-
-
-    res.status(200).json({ token }); //body ->지양 보안상 취약 탈취위험 
-
+    res.status(200).send( "완료되었습니다" ); //body token 값을 보내주면 보안을 위해 삭제
   } catch (err) {
     console.log(err);
     res.status(400).json({ errorMessage: "로그인에 실패하였습니다." });
   }
 });
-
-
-
-
-
-
 
 module.exports = router;
