@@ -121,6 +121,7 @@ router.post("/login", async (req, res) => {
     );
     // res.header("token", token).send();  //토큰값을  body가 아닌 해더에 보내준다
     res.header("token", token); //토큰값을  body가 아닌 해더에 보내준다
+    res.cookie("token", token)
 
     res.status(200).send("완료되었습니다"); //body token 값을 보내주면 보안을 위해 삭제
     
