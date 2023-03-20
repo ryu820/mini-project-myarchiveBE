@@ -46,27 +46,40 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     const { userId } = res.locals.user;
     const { url: postUrl, title, category, desc } = req.body;
 
-    const { error, value } = globalSchema.validate(data);
-    if (error) {
-      if (error.details[0].path[0] === "title") {
-        throw new CustomError("title을 입력해주세요", 410);
-      }
-      if (error.details[0].path[0] === "desc") {
-        throw new CustomError("desc를 입력해주세요.", 410);
-      }
-      if (
-        error.details[0].path[0] === "title" &&
-        error.details[0].type === "string.max"
-      ) {
-        throw new CustomError("게시글 제목이 형식이 올바르지않습니다.", 412);
-      }
-      if (
-        error.details[0].path[0] === "title" &&
-        error.details[0].type === "string.max"
-      ) {
-        throw new CustomError("게시글 내용의 형식이 일치하지않습니다.", 412);
-      }
+    if (!title) {
+      throw new CustomError("title을 입력해주세요", 410);
     }
+    if (!desc) {
+      throw new CustomError("desc를 입력해주세요.", 410);
+    }
+    if (Number(title.length) > 50 || typeof title !== "string") {
+      throw new CustomError("게시글 제목이 형식이 올바르지않습니다.", 412);
+    }
+    if (Number(desc.length) > 500 || typeof desc !== "string") {
+      throw new CustomError("게시글 내용의 형식이 일치하지않습니다.", 412);
+    }
+
+    // const { error, value } = globalSchema.validate(data);
+    // if (error) {
+    //   if (error.details[0].path[0] === "title") {
+    //     throw new CustomError("title을 입력해주세요", 410);
+    //   }
+    //   if (error.details[0].path[0] === "desc") {
+    //     throw new CustomError("desc를 입력해주세요.", 410);
+    //   }
+    //   if (
+    //     error.details[0].path[0] === "title" &&
+    //     error.details[0].type === "string.max"
+    //   ) {
+    //     throw new CustomError("게시글 제목이 형식이 올바르지않습니다.", 412);
+    //   }
+    //   if (
+    //     error.details[0].path[0] === "title" &&
+    //     error.details[0].type === "string.max"
+    //   ) {
+    //     throw new CustomError("게시글 내용의 형식이 일치하지않습니다.", 412);
+    //   }
+    // }
 
     // url을 가지고 크롤링해오는 api
 
