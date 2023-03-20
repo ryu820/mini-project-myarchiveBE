@@ -15,8 +15,10 @@ app.use(
     origin: "*", //프론트의 url
     credentials: true, //쿠키정책
     optionsSuccessStatus: 200,
+    exposedHeaders: ['token']
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -26,8 +28,8 @@ app.use("/post", DetailRouter);
 
 app.use((error, req, res, next) => {
   console.error(error.stack);
-  res.status(error.status).json({
-    errorMessage: error.message || "예상치 못한 에러가 발생하였습니다.",
+  res.status(error.status || 500).json({
+    "errorMessage": error.message || "예상치 못한 에러가 발생하였습니다.",
   });
 });
 
