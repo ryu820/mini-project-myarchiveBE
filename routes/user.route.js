@@ -128,7 +128,7 @@ router.post("/login", async (req, res) => {
 
 
     // res.status(200).send("완료되었습니다"); //body token 값을 보내주면 보안을 위해 삭제
-    res.status(400).json(user.nick);
+    res.status(200).json({"nick":user.nick});
   } catch (error) {
     console.log(error);
     res.status(400).json({ errorMessage: error });
