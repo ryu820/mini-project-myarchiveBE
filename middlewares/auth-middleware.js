@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
     // try {
         const { token } = req.cookies;
         const tokendata = String((token ?? "").split(" "))
-        // console.log(tokendata)
+        console.log(tokendata)
 
         //나중에 다시 열기
         // if (tokenType !== "Bearer") {
@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
         //         .json({ message: "토큰 타입이 일치하지 않습니다." });
         // }
         const decodedToken = jwt.verify(tokendata, env.SECRET_KEY)
-        // console.log(decodedToken)
+        console.log(decodedToken)
         // const decodedToken = jwt.verify(token, env.SECRET_KEY, (error,decoded) => {
         //     const currentTime = Math.floor(Date.now() / 1000);
         //     if (decoded.exp && decoded.exp < currentTime) {
