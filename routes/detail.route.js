@@ -57,7 +57,7 @@ router.get("/:postId/comments", async (req, res, next) => {
     if (!comments) {
       throw new CustomError("게시글이 존재하지 않습니다.", 404);
     }
-    res.status(200).json({ comments });
+    res.status(200).json({ detail: comments });
   } catch (error) {
     next(error);
     res.status(400).json({ errorMessage: "댓글 조회에 실패하였습니다." });

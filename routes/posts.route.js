@@ -17,10 +17,10 @@ router.get("/", async (req, res, next) => {
         "postId",
         "User.accountId",
         "User.nick",
-        "url",
         "img",
         "category",
         "title",
+        "isDone",
       ],
       include: [
         {
