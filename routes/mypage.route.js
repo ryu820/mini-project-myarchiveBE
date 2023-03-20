@@ -14,7 +14,9 @@ router.get("/mypage", authmiddleware, async (req, res) => {
   const donepostlist = await Posts.findAll({
     attributes: [
       "postId",
+      "nick",
       "url",
+      "img",
       "title",
       "category",
       "desc",
@@ -31,7 +33,9 @@ router.get("/mypage", authmiddleware, async (req, res) => {
   const notDonepostlist = await Posts.findAll({
     attributes: [
       "postId",
+      "nick",
       "url",
+      "img",
       "title",
       "category",
       "desc",
@@ -50,7 +54,6 @@ router.get("/mypage", authmiddleware, async (req, res) => {
   // } catch (error) {
   //   res.status(400).json({ errorMessage: "게시글 조회에 실패하였습니다." });
   // }
-
 });
 
 //유저 게시글 수정API
