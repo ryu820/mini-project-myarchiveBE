@@ -46,6 +46,13 @@ router.post("/register", async (req, res) => {
     console.log(accountId, password, nick);
     // const regex = /^[a-zA-Z0-9]{4,}$/; //정규 표현식: 조건 알파벳과숫자로 이루어진 4글자 이상
 
+    // # 412 password가 일치하지 않는 경우
+    // {"errorMessage": "패스워드가 일치하지 않습니다."}
+  
+    //account : 중복 확인, 형식확인 
+    //닉네임 : 중복 확인
+    //비밀번호 : 형식확인 , 닉포함된비밀번호 허용X, 비밀번호 confirm 동일하지 않음(프론트와 조율해야 할 부분)
+
     //닉네임 체크
     const checkNick = await Users.findOne({ where: { nick } });
     if (checkNick) {
@@ -63,16 +70,17 @@ router.post("/register", async (req, res) => {
     //   console.log(accountId + " = 형식이 일치하지 않습니다");
     //   return res
     //     .status(412)
-    //     .json({ errorMessage: "닉네임의 형식이 일치하지 않습니다." });
+    //     .json( {"errorMessage": "아이디 형식이 일치하지 않습니다.});
     // }
 
+    //비밀번호 체크
     // if (!regex.test(password)) {
     //   console.log(password + " = 형식이 일치하지 않습니다");
     //   return res
     //     .status(412)
     //     .json({ errorMessage: "패스워드 형식이 일치하지 않습니다." });
     // }
-
+  
     if (password.toString().includes(nick)) {
       return res
         .status(412)
@@ -112,19 +120,20 @@ router.post("/login", async (req, res) => {
         .json({ errorMessage: "비밀번호가 일치하지 않습니다." });
     }
 
-    // let expires = new Date();
-    // expires.setMinutes(expires.getMinutes() + 60);
-
     const token = jwt.sign(
       { accountId: user.accountId, nick: user.nick },
-      env.SECRET_KEY
-    );
+      env.SECRET_KEY,
+      //만료시간 설정
+      // { expiresIn: "5s" }
+      );
+
 
     // res.header("token", token).send();  //토큰값을  body가 아닌 해더에 보내준다
     res.header("token", token); //토큰값을  body가 아닌 해더에 보내준다
     res.cookie("token", `Bearer ${token}`);
 
     // res.status(200).send("완료되었습니다"); //body token 값을 보내주면 보안을 위해 삭제
+
     res.status(200).json({"nick":user.nick});
   } catch (error) {
     console.log(error);
