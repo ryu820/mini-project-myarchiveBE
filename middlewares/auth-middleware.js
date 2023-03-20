@@ -6,16 +6,17 @@ const env = process.env;
 module.exports = async (req, res, next) => {
     // try {
         const token = req.headers.authorization;
+        // const {token} = req.cookies;
         console.log(token)
-        const tokendata = String((token ?? "").split(" ")[1])
+        const [tokenType,tokendata] = (token ?? "").split(" ")
         console.log(tokendata)
 
-        //나중에 다시 열기
-        // if (tokenType !== "Bearer") {
-        //     return res
-        //         .status(401)
-        //         .json({ message: "토큰 타입이 일치하지 않습니다." });
-        // }
+   
+        if (tokenType !== "Bearer") {
+            return res
+                .status(401)
+                .json({ message: "토큰 타입이 일치하지 않습니다." });
+        }
         const decodedToken = jwt.verify(tokendata, env.SECRET_KEY)
         console.log(decodedToken)
         // const decodedToken = jwt.verify(token, env.SECRET_KEY, (error,decoded) => {
