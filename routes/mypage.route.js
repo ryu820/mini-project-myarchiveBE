@@ -80,21 +80,33 @@ router.put("/post/:postId", authmiddleware, async (req, res, next) => {
 
 })
 
-/**
- * //위시리스트 수정API
+
+//위시리스트 수정API
 //localhost:3017/mypage/:postId
 router.put("/mypage/:postId", authmiddleware, async (req, res, next) => {
   const { postId } = req.params;
-  const { isDone } = req.body;
   const { userId } = res.locals.user;
-  const existsPosts = await Posts.findOne({ where: { postId, userId } });
-   //이부분은 프론트랑 상의 후 작성
-  if (existsPosts.isDone == false){
-
-    await Posts.update({ isDone }, { where: { postId, userId } })
+  try {
+    const existPost = await Posts.findOne({ where: { postId, userId } });
+    //게시글이 존재하지 않을 때
+    if (!existPost) {
+      throw new CustomError("게시글이 존재하지 않습니다.", 403)
+    }
+    if (existPost.isDone == false) {
+      const done = true
+      await Posts.update({ isDone: done }, { where: { postId, userId } })
+      return res.status(200).json({ "message": "위시리스트에서 구매리스트로 이동하였습니다." })
+    } else if (existPost.isDone == true) {
+      const done = false
+      await Posts.update({ isDone: done }, { where: { postId, userId } })
+      return res.status(200).json({ "message": "구매리스트에서 위시리스트로 이동하였습니다." })
+    }
+  }catch(error){
+    next(error)
+    res.status(401).json({"errorMessage": "게시글이 정상적으로 수정되지 않았습니다."})
   }
 })
- */
+
 
 
 module.exports = router;
