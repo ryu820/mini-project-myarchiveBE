@@ -10,7 +10,7 @@ const router = express.Router();
 //localhost:3017/mypage
 router.get("/mypage", authmiddleware, async (req, res) => {
   try {
-    const { userId } = res.locals.user;
+    const { accountId } = res.locals.user;
     const donepostlist = await Posts.findAll({
       attributes: [
         "postId",
@@ -23,7 +23,7 @@ router.get("/mypage", authmiddleware, async (req, res) => {
         "updatedAt",
       ],
       where: {
-        userId: userId,
+        accountId: accountId,
         isDone: true,
       },
       order: [["createdAt", "DESC"]],
@@ -40,7 +40,7 @@ router.get("/mypage", authmiddleware, async (req, res) => {
         "updatedAt",
       ],
       where: {
-        userId: userId,
+        accountId: accountId,
         isDone: false,
       },
       order: [["createdAt", "DESC"]],

@@ -5,16 +5,16 @@ const env = process.env;
 
 module.exports = async (req, res, next) => {
     // try {
-        const { authorization } = req.cookies;
-        const {tokenType,tokendata} = String((authorization ?? "").split(" "))
+        const { token } = req.cookies;
+        const tokendata = String((token ?? "").split(" "))
         console.log(tokendata)
 
-
-        if (tokenType !== "Bearer") {
-            return res
-                .status(401)
-                .json({ message: "토큰 타입이 일치하지 않습니다." });
-        }
+        //나중에 다시 열기
+        // if (tokenType !== "Bearer") {
+        //     return res
+        //         .status(401)
+        //         .json({ message: "토큰 타입이 일치하지 않습니다." });
+        // }
         const decodedToken = jwt.verify(tokendata, env.SECRET_KEY)
         console.log(decodedToken)
         // const decodedToken = jwt.verify(token, env.SECRET_KEY, (error,decoded) => {
@@ -30,7 +30,7 @@ module.exports = async (req, res, next) => {
         const user = await Users.findOne({ where: { accountId } });
 
         if (!user) {
-            res.clearCookie("authorization");
+            res.clearCookie("token");
             return res
                 .status(401)
                 .json({ message: "토큰 사용자가 존재하지 않습니다." });
