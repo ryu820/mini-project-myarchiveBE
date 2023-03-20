@@ -5,7 +5,8 @@ const env = process.env;
 
 module.exports = async (req, res, next) => {
     // try {
-        const { token } = req.cookies;
+        const token = req.cookies;
+        console.log(token)
         const tokendata = String((token ?? "").split(" "))
         console.log(tokendata)
 
