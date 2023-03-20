@@ -120,24 +120,14 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1h" }
     );
     // res.header("token", token).send();  //토큰값을  body가 아닌 해더에 보내준다
-    res.header("authorization", `Bearer ${token}`); //토큰값을  body가 아닌 해더에 보내준다
+    res.header("token", token); //토큰값을  body가 아닌 해더에 보내준다
+    res.cookie("token", token)
 
     res.status(200).send("완료되었습니다"); //body token 값을 보내주면 보안을 위해 삭제
     
   } catch (err) {
     console.log(err);
     res.status(400).json({ errorMessage: "로그인에 실패하였습니다." });
-  }
-});
-
-const authmiddleware = require("../middlewares/auth-middleware");
-router.get("/testServer", authmiddleware, (req, res) => {
-  try {
-    res.send("통과하였습니다");
-    // console.log({token});
-    res.status(200).json({ token });
-  } catch (err) {
-
   }
 });
 
