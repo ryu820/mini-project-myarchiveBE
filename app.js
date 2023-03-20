@@ -15,8 +15,10 @@ app.use(
     origin: "*", //프론트의 url
     credentials: true, //쿠키정책
     optionsSuccessStatus: 200,
+    exposedHeaders: ['token']
   })
 );
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
