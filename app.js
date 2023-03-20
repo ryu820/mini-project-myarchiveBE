@@ -26,8 +26,8 @@ app.use("/post", DetailRouter);
 
 app.use((error, req, res, next) => {
   console.error(error.stack);
-  res.status(error.status).json({
-    errorMessage: error.message || "예상치 못한 에러가 발생하였습니다.",
+  res.status(error.status || 500).json({
+    "errorMessage": error.message || "예상치 못한 에러가 발생하였습니다.",
   });
 });
 
