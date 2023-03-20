@@ -58,7 +58,7 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ errorMessage: "중복된 아이디입니다." });
     }
 
-    // 다시한번더 확인 : 아이디 비밀번호는 정규식 사용하는걸로
+    // 다시한번더 확인 : 아이디 비밀번호는 정규식 사용하는걸s로
     // if (!regex.test(accountId)) {
     //   console.log(accountId + " = 형식이 일치하지 않습니다");
     //   return res
@@ -121,8 +121,8 @@ router.post("/login", async (req, res) => {
     res.header("token", token); //토큰값을  body가 아닌 해더에 보내준다
     res.cookie("token", `Bearer ${token}`)
 
+
     res.status(200).send("완료되었습니다"); //body token 값을 보내주면 보안을 위해 삭제
-    
   } catch (err) {
     console.log(err);
     res.status(400).json({ errorMessage: "로그인에 실패하였습니다." });
