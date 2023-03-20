@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
     // try {
         const token = req.headers.authorization;
         console.log(token)
-        const tokendata = String((token ?? "").split(" "))
+        const tokendata = String((token ?? "").split(" ")[1])
         console.log(tokendata)
 
         //나중에 다시 열기
