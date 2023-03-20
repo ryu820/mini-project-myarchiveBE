@@ -6,6 +6,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const { Posts, Users } = require("../models");
 const { Op } = require("sequelize");
+const { globalSchema } = require("../middlewares/joi");
 
 //게시글 조회api
 //localhost:3017
@@ -105,6 +106,7 @@ router.post("/post", authmiddleware, async (req, res, next) => {
       .json({ errorMessage: "게시글 작성에 실패하였습니다." });
   }
 });
+
 //게시글 삭제 api
 //localhost:3017/post/:postId
 router.delete("/post/:postId", authmiddleware, async (req, res, next) => {
@@ -132,4 +134,5 @@ router.delete("/post/:postId", authmiddleware, async (req, res, next) => {
       .json({ errorMessage: "게시글이 정상적으로 삭제되지 않았습니다." });
   }
 });
+
 module.exports = router;

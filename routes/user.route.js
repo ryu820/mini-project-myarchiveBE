@@ -113,6 +113,7 @@ router.post("/login", async (req, res) => {
     }
 
     res.status(200).send("완료되었습니다"); //body token 값을 보내주면 보안을 위해 삭제
+    
   } catch (err) {
     console.log(err);
     res.status(400).json({ errorMessage: "로그인에 실패하였습니다." });
