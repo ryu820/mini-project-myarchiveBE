@@ -48,7 +48,7 @@ router.get("/mypage", authmiddleware, async (req, res) => {
     const postslist = { done: donepostlist, notdone: notDonepostlist };
     res.status(200).json(postslist);
   } catch (error) {
-    next(error)
+    next(error);
     res.status(400).json({ errorMessage: "게시글 조회에 실패하였습니다." });
   }
 });
@@ -63,16 +63,16 @@ router.put("/post/:postId", authmiddleware, async (req, res, next) => {
     const existPost = await Posts.findOne({
       where: {
         postId: postId,
-        userId: userId
-      }
-    })
+        userId: userId,
+      },
+    });
     //게시글이 존재하지 않을 때
     if (!existPost) {
-      throw new CustomError("게시글이 존재하지 않습니다.", 403)
+      throw new CustomError("게시글이 존재하지 않습니다.", 403);
     }
     //수정권한이 없을때
     if (userId !== existPost.userId) {
-      throw new CustomError("게시글 수정의 권한이 존재하지 않습니다.", 403)
+      throw new CustomError("게시글 수정의 권한이 존재하지 않습니다.", 403);
     }
     //url 수정
     let imageUrl;
@@ -87,20 +87,23 @@ router.put("/post/:postId", authmiddleware, async (req, res, next) => {
       undefined;
     }
     //수정 업데이트
-    await Posts.update({
-      url: postUrl,
-      img: imageUrl,
-      title,
-      desc
-    }, { where: { postId, userId } })
-    res.status(200).json({ "message": "게시글을 수정하였습니다." })
+    await Posts.update(
+      {
+        url: postUrl,
+        img: imageUrl,
+        title,
+        desc,
+      },
+      { where: { postId, userId } }
+    );
+    res.status(200).json({ message: "게시글을 수정하였습니다." });
   } catch (error) {
-    next(error)
-    res.status(401).json({ "errorMessage": "게시글이 정상적으로 수정되지 않았습니다." })
+    next(error);
+    res
+      .status(401)
+      .json({ errorMessage: "게시글이 정상적으로 수정되지 않았습니다." });
   }
-
-})
-
+});
 
 //위시리스트 수정API
 //localhost:3017/mypage/:postId
@@ -111,23 +114,27 @@ router.put("/mypage/:postId", authmiddleware, async (req, res, next) => {
     const existPost = await Posts.findOne({ where: { postId, userId } });
     //게시글이 존재하지 않을 때
     if (!existPost) {
-      throw new CustomError("게시글이 존재하지 않습니다.", 403)
+      throw new CustomError("게시글이 존재하지 않습니다.", 403);
     }
     if (existPost.isDone == false) {
-      const done = true
-      await Posts.update({ isDone: done }, { where: { postId, userId } })
-      return res.status(200).json({ "message": "위시리스트에서 구매리스트로 이동하였습니다." })
+      const done = true;
+      await Posts.update({ isDone: done }, { where: { postId, userId } });
+      return res
+        .status(200)
+        .json({ message: "위시리스트에서 구매리스트로 이동하였습니다." });
     } else if (existPost.isDone == true) {
-      const done = false
-      await Posts.update({ isDone: done }, { where: { postId, userId } })
-      return res.status(200).json({ "message": "구매리스트에서 위시리스트로 이동하였습니다." })
+      const done = false;
+      await Posts.update({ isDone: done }, { where: { postId, userId } });
+      return res
+        .status(200)
+        .json({ message: "구매리스트에서 위시리스트로 이동하였습니다." });
     }
   } catch (error) {
-    next(error)
-    res.status(401).json({ "errorMessage": "게시글이 정상적으로 수정되지 않았습니다." })
+    next(error);
+    res
+      .status(401)
+      .json({ errorMessage: "게시글이 정상적으로 수정되지 않았습니다." });
   }
-})
-
-
+});
 
 module.exports = router;

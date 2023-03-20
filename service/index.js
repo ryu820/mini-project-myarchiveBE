@@ -1,4 +1,4 @@
-const { onStart, onSendingMsgError } = require("/service/log")
+const { onStart, onSendingMsgError } = require("/service/log");
 
-onStart()
-onSendingMsgError(error, msg)
+onStart();
+onSendingMsgError(error, msg);
