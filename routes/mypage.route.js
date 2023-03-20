@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const { Posts } = require("../models");
+const { Posts, Users } = require("../models");
 const authmiddleware = require("../middlewares/auth-middleware.js");
 const CustomError = require("../middlewares/errorhandler");
 const router = express.Router();
@@ -12,15 +12,24 @@ router.get("/mypage", authmiddleware, async (req, res) => {
   // try {
   const { userId } = res.locals.user;
   const donepostlist = await Posts.findAll({
+    raw: true,
     attributes: [
       "postId",
+      "User.nick",
       "url",
+      "img",
       "title",
       "category",
       "desc",
       "isDone",
       "createdAt",
       "updatedAt",
+    ],
+    include: [
+      {
+        model: Users,
+        attributes: []
+      }
     ],
     where: {
       userId: userId,
@@ -29,15 +38,24 @@ router.get("/mypage", authmiddleware, async (req, res) => {
     order: [["createdAt", "DESC"]],
   });
   const notDonepostlist = await Posts.findAll({
+    raw: true,
     attributes: [
       "postId",
+      "User.nick",
       "url",
+      "img",
       "title",
       "category",
       "desc",
       "isDone",
       "createdAt",
       "updatedAt",
+    ],
+    include: [
+      {
+        model: Users,
+        attributes: []
+      }
     ],
     where: {
       userId: userId,
@@ -50,7 +68,6 @@ router.get("/mypage", authmiddleware, async (req, res) => {
   // } catch (error) {
   //   res.status(400).json({ errorMessage: "게시글 조회에 실패하였습니다." });
   // }
-
 });
 
 //유저 게시글 수정API

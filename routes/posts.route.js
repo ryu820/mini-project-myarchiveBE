@@ -105,7 +105,6 @@ router.post("/post", authmiddleware, async (req, res, next) => {
       undefined;
     }
 
-    const now = new Date();
     const posts = await Posts.create({
       userId: userId,
       url: postUrl,
@@ -114,8 +113,6 @@ router.post("/post", authmiddleware, async (req, res, next) => {
       category,
       desc,
       isDone: false,
-      createdAt: now,
-      updatedAt: now,
     });
     if (!posts) {
       throw new CustomError("데이터 형식이 올바르지 않습니다..", 412);
