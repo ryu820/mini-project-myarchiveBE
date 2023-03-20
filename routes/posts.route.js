@@ -17,10 +17,10 @@ router.get("/", async (req, res, next) => {
         "postId",
         "User.accountId",
         "User.nick",
-        "url",
         "img",
         "category",
         "title",
+        "isDone",
       ],
       include: [
         {
@@ -69,11 +69,15 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     let imageUrl;
 
     if (postUrl) {
-      const response = await axios.get(postUrl); //이거 두개 if로 걸러주고
-      let $ = cheerio.load(response.data);
-      imageUrl =
-        $("img#mainImg").attr("src") ||
-        $('meta[property="og:image"]').attr("content");
+      if (postUrl.startsWith("http")) {
+        const response = await axios.get(postUrl); //이거 두개 if로 걸러주고
+        let $ = cheerio.load(response.data);
+        imageUrl =
+          $("img#mainImg").attr("src") ||
+          $('meta[property="og:image"]').attr("content");
+      } else {
+        throw new CustomError("url주소를 불러올 수 없습니다.", 410);
+      }
     } else {
       undefined;
     }
