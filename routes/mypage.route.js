@@ -10,7 +10,7 @@ const router = express.Router();
 //localhost:3017/mypage
 router.get("/mypage", authmiddleware, async (req, res) => {
   try {
-    const { userId } = res.locals.user;
+    const { accountId } = res.locals.user;
     const donepostlist = await Posts.findAll({
       attributes: [
         "postId",
@@ -23,7 +23,7 @@ router.get("/mypage", authmiddleware, async (req, res) => {
         "updatedAt",
       ],
       where: {
-        userId: userId,
+        accountId: accountId,
         isDone: true,
       },
       order: [["createdAt", "DESC"]],
@@ -40,7 +40,7 @@ router.get("/mypage", authmiddleware, async (req, res) => {
         "updatedAt",
       ],
       where: {
-        userId: userId,
+        accountId: accountId,
         isDone: false,
       },
       order: [["createdAt", "DESC"]],
@@ -48,7 +48,6 @@ router.get("/mypage", authmiddleware, async (req, res) => {
     const postslist = { done: donepostlist, notdone: notDonepostlist };
     res.status(200).json(postslist);
   } catch (error) {
-    next(error);
     res.status(400).json({ errorMessage: "게시글 조회에 실패하였습니다." });
   }
 });
