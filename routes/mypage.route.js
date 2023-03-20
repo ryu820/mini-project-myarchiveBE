@@ -1,7 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const { Posts } = require("../models");
+const { Posts, Users } = require("../models");
 const authmiddleware = require("../middlewares/auth-middleware.js");
 const CustomError = require("../middlewares/errorhandler");
 const router = express.Router();
@@ -12,9 +12,10 @@ router.get("/mypage", authmiddleware, async (req, res) => {
   // try {
   const { userId } = res.locals.user;
   const donepostlist = await Posts.findAll({
+    raw: true,
     attributes: [
       "postId",
-      "nick",
+      "User.nick",
       "url",
       "img",
       "title",
@@ -24,6 +25,12 @@ router.get("/mypage", authmiddleware, async (req, res) => {
       "createdAt",
       "updatedAt",
     ],
+    include: [
+      {
+        model: Users,
+        attributes: []
+      }
+    ],
     where: {
       userId: userId,
       isDone: true,
@@ -31,9 +38,10 @@ router.get("/mypage", authmiddleware, async (req, res) => {
     order: [["createdAt", "DESC"]],
   });
   const notDonepostlist = await Posts.findAll({
+    raw: true,
     attributes: [
       "postId",
-      "nick",
+      "User.nick",
       "url",
       "img",
       "title",
@@ -42,6 +50,12 @@ router.get("/mypage", authmiddleware, async (req, res) => {
       "isDone",
       "createdAt",
       "updatedAt",
+    ],
+    include: [
+      {
+        model: Users,
+        attributes: []
+      }
     ],
     where: {
       userId: userId,
