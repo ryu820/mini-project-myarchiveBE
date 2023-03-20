@@ -8,7 +8,7 @@ const router = express.Router();
 
 //유저 게시글 조회API
 //localhost:3017/mypage
-router.get("/mypage", authmiddleware, async (req, res) => {
+router.get("/mypage", authmiddleware, async (req, res,next) => {
   try {
     const { accountId } = res.locals.user;
     const donepostlist = await Posts.findAll({
