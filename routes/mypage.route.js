@@ -8,7 +8,7 @@ const router = express.Router();
 
 //유저 게시글 조회API
 //localhost:3017/mypage
-router.get("/mypage", authmiddleware, async (req, res,next) => {
+router.get("/mypage", authmiddleware, async (req, res) => {
   try {
     const { accountId } = res.locals.user;
     const donepostlist = await Posts.findAll({
@@ -48,7 +48,6 @@ router.get("/mypage", authmiddleware, async (req, res,next) => {
     const postslist = { done: donepostlist, notdone: notDonepostlist };
     res.status(200).json(postslist);
   } catch (error) {
-    next(error);
     res.status(400).json({ errorMessage: "게시글 조회에 실패하였습니다." });
   }
 });
