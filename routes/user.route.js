@@ -90,7 +90,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-
 //로그인 API
 //localhost:3017/login
 router.post("/login", async (req, res) => {
@@ -115,11 +114,15 @@ router.post("/login", async (req, res) => {
 
     let expires = new Date();
     expires.setMinutes(expires.getMinutes() + 60);
-    const token = jwt.sign({ accountId: user.accountId, nick : user.nick }, env.SECRET_KEY, {expiresIn: "1h",});
+    const token = jwt.sign(
+      { accountId: user.accountId, nick: user.nick },
+      env.SECRET_KEY,
+      { expiresIn: "1h" }
+    );
     // res.header("token", token).send();  //토큰값을  body가 아닌 해더에 보내준다
-    res.header("token", token);  //토큰값을  body가 아닌 해더에 보내준다
+    res.header("token", token); //토큰값을  body가 아닌 해더에 보내준다
 
-    res.status(200).send( "완료되었습니다" ); //body token 값을 보내주면 보안을 위해 삭제
+    res.status(200).send("완료되었습니다"); //body token 값을 보내주면 보안을 위해 삭제
   } catch (err) {
     console.log(err);
     res.status(400).json({ errorMessage: "로그인에 실패하였습니다." });
