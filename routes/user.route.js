@@ -43,21 +43,14 @@ router.post("/register/check-nick", async (req, res) => {
 router.post("/register", async (req, res) => {
   try {
     const { accountId, password, nick } = req.body;
-    console.log(accountId, password, nick)
-    // const regex = /^[a-z0-9]{4,}$/; //정규 표현식: 조건 알파벳과숫자로 이루어진 4글자 이상
-    
+    console.log(accountId, password, nick);
+    // const regex = /^[a-zA-Z0-9]{4,}$/; //정규 표현식: 조건 알파벳과숫자로 이루어진 4글자 이상
+
     //닉네임 체크
     const checkNick = await Users.findOne({ where: { nick } });
     if (checkNick) {
       return res.status(400).json({ errorMessage: "중복된 닉네임입니다." });
     }
-
-    // if (!regex.test(nick)) {
-    //   console.log(nick + " = 형식이 일치하지 않습니다");
-    //   return res
-    //     .status(412)
-    //     .json({ errorMessage: "닉네임의 형식이 일치하지 않습니다." });
-    // }
 
     //아이디 체크
     const checkId = await Users.findOne({ where: { accountId } });
@@ -65,6 +58,7 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ errorMessage: "중복된 아이디입니다." });
     }
 
+    // 다시한번더 확인 : 아이디 비밀번호는 정규식 사용하는걸로
     // if (!regex.test(accountId)) {
     //   console.log(accountId + " = 형식이 일치하지 않습니다");
     //   return res
@@ -118,16 +112,33 @@ router.post("/login", async (req, res) => {
         .json({ errorMessage: "비밀번호가 일치하지 않습니다." });
     }
 
-    //jwt생성
-    const token = jwt.sign({ userId: user.userId }, env.SECRET_KEY);
+    let expires = new Date();
+    expires.setMinutes(expires.getMinutes() + 60);
 
-    //쿠키발급
-    res.cookie("authorization", `Bearer ${token}`); //cookie -> 확실하게 헤더에 들어가는건지? ok 프론트에서 확인하려면 뭔가 해줘야된다....
+    //토큰 유효시간 1시간으로 설정
+    // const token = jwt.sign({ userId: user.userId }, env.SECRET_KEY, {
+    //   expiresIn: "1h",
+    // });
+    // res.cookie("authorization", `Bearer ${token}`, { expires: expires });
+
+    // //jwt생성
+     const token = jwt.sign({ userId: user.userId }, env.SECRET_KEY);
+    // //쿠키발급
+     res.cookie("authorization", `Bearer ${token}`); //cookie -> 확실하게 헤더에 들어가는건지? ok 프론트에서 확인하려면 뭔가 해줘야된다....
+
+
     res.status(200).json({ token }); //body ->지양 보안상 취약 탈취위험 
+
   } catch (err) {
     console.log(err);
     res.status(400).json({ errorMessage: "로그인에 실패하였습니다." });
   }
 });
+
+
+
+
+
+
 
 module.exports = router;
