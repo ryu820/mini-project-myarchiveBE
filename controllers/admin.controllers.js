@@ -28,7 +28,6 @@ class AdminController {
         .json({ message: `${adminUser.nick}님이 로그인하였습니다.` });
     } catch (error) {
       next(error);
-      res.status(400).json({ errorMessage: "로그인에 실패하였습니다." });
     }
   };
 
@@ -38,7 +37,6 @@ class AdminController {
       res.status(200).json({ users: findUsers });
     } catch (error) {
       next(error);
-      res.status(200).json({ errorMessage: "유저 조회에 실패하였습니다." });
     }
   };
 
@@ -49,7 +47,6 @@ class AdminController {
       res.status(200).json({ message: "해당 회원을 삭제하였습니다." });
     } catch (error) {
       next(error);
-      res.status(400).json({ errorMessage: "회원 삭제에 실패하였습니다." });
     }
   };
 
@@ -58,7 +55,7 @@ class AdminController {
       const allposts = await this.AdminService.allPosts({});
       res.status(200).json({ posts: allposts });
     } catch (error) {
-      res.status(400).json({ errorMessage: "게시글 조회에 실패하였습니다." });
+      next(error)
     }
   };
 
@@ -69,7 +66,6 @@ class AdminController {
       res.status(200).json({ message: "게시글이 삭제되었습니다." });
     } catch (error) {
       next(error);
-      res.status(400).json({ errorMessage: "게시글 삭제에 실패하였습니다." });
     }
   };
 
@@ -79,7 +75,6 @@ class AdminController {
       res.status(200).json({ comments: findComments });
     } catch (error) {
       next(error);
-      res.status(404).json({ errorMessage: "댓글이 조회에 실패하였습니다." });
     }
   };
 
@@ -90,7 +85,6 @@ class AdminController {
       res.status(200).json({ message: "댓글이 삭제되었습니다." });
     } catch (error) {
       next(error);
-      res.status(400).json({ errorMessage: "댓글 삭제에 실패하였습니다." });
     }
   };
 }
