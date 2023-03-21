@@ -14,7 +14,7 @@ class UserController {
     checkId = async (req, res, next) => {
         const { accountId } = req.body;
         try {
-            const checkId = await this.UserService.findId({ accountId })
+            const checkId = await this.UserService.findById({ accountId })
             if (checkId) {
                 throw new CustomError("중복된 아이디입니다.", 412)
             } else {
@@ -28,7 +28,7 @@ class UserController {
     checkNick = async (req, res, next) => {
         const { nick } = req.body;
         try {
-            const checkNick = await this.UserService.findNick({ nick })
+            const checkNick = await this.UserService.findByNick({ nick })
             console.log(checkNick)
             if (checkNick) {
                 throw new CustomError("중복된 닉네임입니다.", 412)
