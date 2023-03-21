@@ -1,51 +1,44 @@
-// const DetailRepository = require("../repositories/detail.repositories");
+const DetailRepository = require("../repositories/detail.repositories");
+const CustomError = require("../middlewares/errorhandler");
 
-// class DetailService {
-//   constructor() {
-//     this.DetailRepository = new DetailRepository();
-//   }
+class DetailService {
+  constructor() {
+    this.DetailRepository = new DetailRepository();
+  }
 
-//   OnesPost = async (postId) => {
-//     try {
-//       const getPost = await this.DetailRepository.OnesPost(postId);
+  OnesPost = async (postId) => {
+    const getPost = await this.DetailRepository.OnesPost(postId);
 
-//       return getPost;
-//     } catch (error) {}
-//   };
+    return getPost;
+  };
 
-//   getComment = async (postId) => {
-//     try {
-//       const comment = await this.DetailRepository.getComment(postId);
+  getComment = async (postId) => {
+    const comment = await this.DetailRepository.getComment(postId);
 
-//       return comment;
-//     } catch (error) {}
-//   };
+    return comment;
+  };
 
-//   postComment = async (postId, userId, comment) => {
-//     try {
-//       const createComment = await this.DetailRepository.postComment(
-//         postId,
-//         userId,
-//         comment
-//       );
+  postComment = async (postId, userId, comment) => {
+    const createComment = await this.DetailRepository.postComment(
+      postId,
+      userId,
+      comment
+    );
 
-//       return createComment;
-//     } catch (error) {}
-//   };
+    return createComment;
+  };
 
-//   delComment = async (postId, userId, commentId) => {
-//     try {
-//       let comment = await Comments.findOne({ where: { commentId } });
-//       const delcomment = await this.DetailRepository.delComment(
-//         postId,
-//         userId,
-//         commentId,
-//         comment
-//       );
+  delComment = async (postId, userId, commentId) => {
+    let comment = await Comments.findOne({ where: { commentId } });
+    const delcomment = await this.DetailRepository.delComment(
+      postId,
+      userId,
+      commentId,
+      comment
+    );
 
-//       return delcomment;
-//     } catch (error) {}
-//   };
-// }
+    return delcomment;
+  };
+}
 
-// module.exports = DetailService;
+module.exports = DetailService;
