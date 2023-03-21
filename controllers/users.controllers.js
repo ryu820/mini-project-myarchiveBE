@@ -10,34 +10,33 @@ class UserController {
         this.UserService = new UserService();
     }
 
-    checkId = async (req, res, next) => {
-        const { accountId } = req.body;
-        try {
-            const checkId = await this.UserService.findById({ accountId })
-            if (checkId) {
-                throw new CustomError("중복된 아이디입니다.", 412)
-            } else {
-                return res.status(200).json({ "message": "사용가능한 아이디 입니다" });
-            }
-        } catch (error) {
-            next(error)
-        }
-
+  checkId = async (req, res, next) => {
+    const { accountId } = req.body;
+    try {
+      const checkId = await this.UserService.findById({ accountId });
+      if (checkId) {
+        throw new CustomError("중복된 아이디입니다.", 412);
+      } else {
+        return res.status(200).json({ message: "사용가능한 아이디 입니다" });
+      }
+    } catch (error) {
+      next(error);
     }
 
-    checkNick = async (req, res, next) => {
-        const { nick } = req.body;
-        try {
-            const checkNick = await this.UserService.findByNick({ nick })
-            console.log(checkNick)
-            if (checkNick) {
-                throw new CustomError("중복된 닉네임입니다.", 412)
-            } else {
-                return res.status(200).json({ message: "사용가능한 닉네임 입니다" });
-            }
-        } catch (error) {
-            next(error)
-        }
+  };
+
+  checkNick = async (req, res, next) => {
+    const { nick } = req.body;
+    try {
+      const checkNick = await this.UserService.findByNick({ nick });
+      console.log(checkNick);
+      if (checkNick) {
+        throw new CustomError("중복된 닉네임입니다.", 412);
+      } else {
+        return res.status(200).json({ message: "사용가능한 닉네임 입니다" });
+      }
+    } catch (error) {
+      next(error);
     }
 
 

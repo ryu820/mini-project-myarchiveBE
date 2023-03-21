@@ -43,7 +43,6 @@ class PostController {
     } catch (error) {
       next(error);
     }
-  };
 
   delPost = async (req, res, next) => {
     const { postId } = req.params;

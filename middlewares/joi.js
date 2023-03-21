@@ -9,7 +9,7 @@ const globalSchema = Joi.object({
   title: Joi.string().max(50).required(),
   desc: Joi.string().max(500).required(),
   isDone: Joi.boolean().required(),
-  url: Joi.string().valid("https"),
+  url: Joi.string().valid("https", "https"),
 });
 
 module.exports = { globalSchema };
