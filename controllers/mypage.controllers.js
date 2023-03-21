@@ -35,16 +35,8 @@ class MypageController {
         const { userId } = res.locals.user;
         try {
             const existPost = await this.MypageService.existPost({ postId, userId })
-            if (existPost.isDone == false) {
-                const done = true;
-                await this.MypageService.checkWishList({ postId, userId, done });
-                return res.status(200).json({ message: "위시리스트에서 구매리스트로 이동하였습니다." });
-
-            } else if (existPost.isDone == true) {
-                const done = false;
-                await this.MypageService.checkWishList({ postId, userId, done });
-                return res.status(200).json({ message: "구매리스트에서 위시리스트로 이동하였습니다." });
-            }
+            const message = await this.MypageService.checkWishList({postId, userId,existPost})
+            res.status(200).json({"message" : message})
         } catch (error) {
             next(error);
         }

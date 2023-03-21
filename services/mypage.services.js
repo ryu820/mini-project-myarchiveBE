@@ -46,8 +46,19 @@ class MypageService {
         await this.MypageRepository.updatePost({ postId, userId, postUrl, imageUrl, title, desc })
     }
 
-    checkWishList = async ({ postId, userId , done }) => {
-        await this.MypageRepository.updateWishList({ postId, userId , done })
+    checkWishList = async ({ postId, userId,existPost }) => {
+        if (existPost.isDone == false) {
+            const done = true;
+            await this.MypageRepository.updateWishList({ postId, userId, done });
+            const message = "위시리스트에서 구매리스트로 이동하였습니다."
+            return message;
+        } else if (existPost.isDone == true) {
+            const done = false;
+            await this.MypageRepository.updateWishList({ postId, userId, done });
+            const message = "구매리스트에서 위시리스트로 이동하였습니다."
+            return message;
+        }
+        
     }
 
 }
