@@ -6,6 +6,7 @@ class AdminRepository extends Admins {
     super();
   }
   adminLogin = async (accountId, password, secretKey) => {
+    console.log(accountId, password, secretKey);
     const adminUser = await Admins.findOne({ where: { accountId } });
     if (!adminUser) {
       throw new CustomError("아이디가 존재하지 않습니다.", 412);
