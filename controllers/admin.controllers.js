@@ -1,5 +1,13 @@
 const AdminService = require("../services/admin.services");
 const CustomError = require("../middlewares/errorhandler.js");
+const globalSchema = require("../middlewares/joi");
+const Joi = require("joi");
+
+const adminLoginSchema = Joi.object({
+  accountId: Joi.string().required(),
+  password: Joi.string().required(),
+  secretKey: Joi.string().required(),
+});
 
 class AdminController {
   constructor() {
@@ -7,7 +15,9 @@ class AdminController {
   }
   adminLogin = async (req, res, next) => {
     try {
-      const { accountId, password, secretKey } = req.body;
+      const { accountId, password, secretKey } =
+        await adminLoginSchema.validateAsync(req.body);
+      console.log(accountId, password, secretKey);
       const adminUser = await this.AdminService.adminLogin(
         accountId,
         password,
