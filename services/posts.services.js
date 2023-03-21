@@ -25,14 +25,13 @@ class PostService {
     let imageUrl;
 
     if (postUrl) {
-      if (postUrl.startsWith("http")) {
-        const response = await axios.get(postUrl); //이거 두개 if로 걸러주고
-        let $ = cheerio.load(response.data);
-        imageUrl =
-          $("img#mainImg").attr("src") ||
-          $('meta[property="og:image"]').attr("content");
-      } else {
-        throw new CustomError("url주소를 불러올 수 없습니다.", 410);
+      const response = await axios.get(postUrl);
+      let $ = cheerio.load(response.data);
+      imageUrl =
+        $("img#mainImg").attr("src") ||
+        $('meta[property="og:image"][content^="http"]').attr("content");
+      if (!postUrl.startsWith("http") && imageUrl.startsWith("/web")) {
+        $("img").attr("src");
       }
     } else {
       undefined;
