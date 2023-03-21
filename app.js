@@ -13,9 +13,9 @@ const PORT = 3017;
 // app.use(cors());
 app.use(
   cors({
-    origin: [
-      "http://mini-project-myarchive.s3-website.ap-northeast-2.amazonaws.com/",
-      "http://localhost:3000"
+    "Access-Control-Allow-Origin": ["*"
+      // "http://mini-project-myarchive.s3-website.ap-northeast-2.amazonaws.com/",
+      // "http://localhost:3000"
     ], //프론트의 url
     credentials: true, //쿠키정책
     optionsSuccessStatus: 200,
