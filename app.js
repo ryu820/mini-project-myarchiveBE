@@ -19,7 +19,7 @@ app.use(
     ], //프론트의 url
     optionsSuccessStatus: 200,
     "Access-Control-Expose-Headers": 'token',
-    "Access-Control-Expose-credentials": true
+    "Access-Control-Expose-Credentials": true
   })
 );
 
