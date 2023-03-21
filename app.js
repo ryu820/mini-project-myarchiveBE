@@ -19,7 +19,7 @@ app.use(
     ], //프론트의 url
     credentials: true, //쿠키정책
     optionsSuccessStatus: 200,
-    exposedHeaders: ['token']
+    "Access-Control-Expose-Headers": ['token']
   })
 );
 
