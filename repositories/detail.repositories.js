@@ -28,6 +28,7 @@ class DetailRepository extends Comments {
         },
       ],
     });
+
     return detail_posts;
   };
 
