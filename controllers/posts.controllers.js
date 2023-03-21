@@ -43,7 +43,7 @@ class PostController {
     } catch (error) {
       next(error);
     }
-
+  }
   delPost = async (req, res, next) => {
     const { postId } = req.params;
     const { userId } = res.locals.user;
@@ -56,5 +56,4 @@ class PostController {
     }
   };
 }
-
 module.exports = PostController;
