@@ -5,12 +5,12 @@ class UserService {
     constructor() {
         this.UserRepository = new UserRepository();
     }
-    findId = async ({ accountId }) => {
-        const check = await this.UserRepository.findId({ accountId })
+    findById = async ({ accountId }) => {
+        const check = await this.UserRepository.findById({ accountId })
         return check;
     }
-    findNick = async ({ nick }) => {
-        const check = await this.UserRepository.findNick({ nick })
+    findByNick = async ({ nick }) => {
+        const check = await this.UserRepository.findByNick({ nick })
         console.log(check)
         return check;
     }
@@ -29,8 +29,8 @@ class UserService {
             throw new CustomError("패스워드 형식이 일치하지 않습니다.", 412)
         }
         //닉네임,아이디 중복 체크
-        const checkNick = await this.UserRepository.findNick({ nick })
-        const checkId = await this.UserRepository.findId({ accountId })
+        const checkNick = await this.UserRepository.findByNick({ nick })
+        const checkId = await this.UserRepository.findById({ accountId })
 
         if (checkNick) {
             throw new CustomError("중복된 닉네임입니다.", 412)
@@ -39,7 +39,7 @@ class UserService {
         }
     }
     checkloginUser = async({ accountId, password }) => {
-        const user = await this.UserRepository.findId({ accountId })
+        const user = await this.UserRepository.findById({ accountId })
         if (!user) {
             throw new CustomError("존재하지 않는 유저입니다.", 401)
         } else if (user.password != password) {

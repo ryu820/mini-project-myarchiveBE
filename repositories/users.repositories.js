@@ -1,11 +1,11 @@
 const { Users } = require("../models");
 class UserRepository {
     constructor(){}
-    findId = async ({ accountId }) => {
+    findById = async ({ accountId }) => {
         const check = await Users.findOne({ where: { accountId } });
         return check;
     }
-    findNick = async ({ nick }) => {
+    findByNick = async ({ nick }) => {
         const check = await Users.findOne({ where: { nick } });
         console.log(check)
         return check;
