@@ -13,9 +13,6 @@ class PostController {
       res.status(200).json({ posts: posts });
     } catch (error) {
       next(error);
-      return res
-        .status(400)
-        .json({ errorMessage: "게시글 조회에 실패하였습니다." });
     }
   };
   createPost = async (req, res, next) => {
@@ -44,10 +41,7 @@ class PostController {
       });
       res.status(201).json({ posts, message: "게시글 작성에 성공하였습니다." });
     } catch (error) {
-      // next(error);
-      return res
-        .status(412)
-        .json({ errorMessage: "게시글 작성에 실패하였습니다." });
+      next(error);
     }
   };
 
@@ -60,9 +54,6 @@ class PostController {
       res.status(200).json({ message: "게시글이 삭제되었습니다." });
     } catch (error) {
       next(error);
-      return res
-        .status(401)
-        .json({ errorMessage: "게시글이 정상적으로 삭제되지 않았습니다." });
     }
   };
 }
