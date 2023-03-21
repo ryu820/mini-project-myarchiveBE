@@ -4,6 +4,7 @@ require("dotenv").config();
 const env = process.env;
 
 module.exports = async (req, res, next) => {
+
   try {
     const token = req.headers.authorization;
     // const { token } = req.cookies;
