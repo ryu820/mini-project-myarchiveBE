@@ -1,13 +1,13 @@
 const jwt = require("jsonwebtoken");
-const { Users } = require("../models");
+const { Users,Admins } = require("../models");
 require("dotenv").config();
 const env = process.env;
 
 module.exports = async (req, res, next) => {
 
   try {
-    const token = req.headers.authorization;
-    //const { token } = req.cookies;
+    // const token = req.headers.authorization;
+    const { token } = req.cookies;
 
     console.log("token : ", token);
     const [tokenType, tokendata] = (token ?? "").split(" ");
@@ -20,16 +20,15 @@ module.exports = async (req, res, next) => {
     }
     const decodedToken = jwt.verify(tokendata, env.SECRET_KEY);
     console.log(decodedToken);
-    // const decodedToken = jwt.verify(token, env.SECRET_KEY, (error,decoded) => {
-    //     const currentTime = Math.floor(Date.now() / 1000);
-    //     if (decoded.exp && decoded.exp < currentTime) {
-    //         console.log("만료되었다 이놈아")
-    //     }
-    // });
 
     const accountId = decodedToken.accountId;
-
-    const user = await Users.findOne({ where: { accountId } });
+    let user;
+    //관리자 유저일 때
+    if (!decodedToken.nick){
+      user = await Admins.findOne({ where: { accountId } });
+    }else {
+      user = await Users.findOne({ where: { accountId } });
+    }
 
     if (!user) {
       res.clearCookie("token");
@@ -41,9 +40,6 @@ module.exports = async (req, res, next) => {
 
     next();
   } catch (error) {
-    res.clearCookie("authorization");
-    return res.status(401).json({
-      message: "비정상적인 요청입니다.",
-    });
+    next(error)
   }
 };

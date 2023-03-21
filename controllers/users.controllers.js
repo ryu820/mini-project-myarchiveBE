@@ -1,10 +1,9 @@
 const UserService = require("../services/users.services.js");
 const CustomError = require("../middlewares/errorhandler.js");
 const { Users } = require("../models");
-
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
 const env = process.env;
+const jwt = require("jsonwebtoken");
+
 
 class UserController {
     constructor() {

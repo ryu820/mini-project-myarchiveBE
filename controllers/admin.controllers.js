@@ -1,7 +1,8 @@
 const AdminService = require("../services/admin.services");
-const CustomError = require("../middlewares/errorhandler.js");
 const globalSchema = require("../middlewares/joi");
 const Joi = require("joi");
+const jwt = require("jsonwebtoken");
+const env = process.env;
 
 const adminLoginSchema = Joi.object({
   accountId: Joi.string().required(),
@@ -23,6 +24,15 @@ class AdminController {
         password,
         secretKey
       );
+      
+      const token = jwt.sign(
+        { accountId: adminUser.accountId },
+        env.SECRET_KEY,
+        { expiresIn: "2H" }
+      );
+
+      res.header("token", token); //토큰값을  body가 아닌 해더에 보내준다
+      res.cookie("token", `Bearer ${token}`);
       res
         .status(200)
         .json({ message: `${adminUser.nick}님이 로그인하였습니다.` });
