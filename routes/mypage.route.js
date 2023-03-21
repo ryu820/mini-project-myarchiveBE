@@ -22,8 +22,6 @@ router.get("/mypage", authmiddleware, async (req, res) => {
       "category",
       "desc",
       "isDone",
-      "createdAt",
-      "updatedAt",
     ],
     include: [
       {
@@ -48,8 +46,6 @@ router.get("/mypage", authmiddleware, async (req, res) => {
       "category",
       "desc",
       "isDone",
-      "createdAt",
-      "updatedAt",
     ],
     include: [
       {
