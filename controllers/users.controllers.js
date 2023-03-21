@@ -77,7 +77,7 @@ class UserController {
             res.header("token", token); //토큰값을  body가 아닌 해더에 보내준다
             res.cookie("token", `Bearer ${token}`);
 
-            res.status(200).json({ token, nick: user.nick });
+            res.status(200).json({ nick: user.nick });
         } catch (error) {
             next(error);
         }
