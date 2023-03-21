@@ -17,9 +17,9 @@ app.use(
       "http://mini-project-myarchive.s3-website.ap-northeast-2.amazonaws.com/",
       "http://localhost:3000"
     ], //프론트의 url
-    credentials: true, //쿠키정책
     optionsSuccessStatus: 200,
-    "Access-Control-Expose-Headers": 'token'
+    "Access-Control-Expose-Headers": 'token',
+    "Access-Control-Expose-credentials": true
   })
 );
 
