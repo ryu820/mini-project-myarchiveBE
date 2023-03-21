@@ -5,6 +5,18 @@ const router = express.Router();
 const { Posts, Comments, Users } = require("../models");
 const { Op } = require("sequelize");
 
+// const DetailController = require("../controllers/detail.controllers");
+// const detailsController = new DetailController();
+
+// router.get("/:postId", detailsController.OnesPost);
+// router.get("/:postId/comments", detailsController.getComment);
+// router.post("/:postId/comments", authmiddleware, detailsController.postComment);
+// router.delete(
+//   "/:postId/comments/:commentId",
+//   authmiddleware,
+//   detailsController.delComment
+// );
+
 //게시물 단일조회
 //localhost:3017/post/:postId
 router.get("/:postId", async (req, res, next) => {
