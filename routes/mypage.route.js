@@ -26,8 +26,8 @@ router.get("/mypage", authmiddleware, async (req, res) => {
     include: [
       {
         model: Users,
-        attributes: []
-      }
+        attributes: [],
+      },
     ],
     where: {
       userId: userId,
@@ -50,8 +50,8 @@ router.get("/mypage", authmiddleware, async (req, res) => {
     include: [
       {
         model: Users,
-        attributes: []
-      }
+        attributes: [],
+      },
     ],
     where: {
       userId: userId,
@@ -120,7 +120,7 @@ router.put("/post/:postId", authmiddleware, async (req, res, next) => {
 
 //위시리스트 수정API
 //localhost:3017/mypage/:postId
-router.put("/mypage/:postId", authmiddleware, async (req, res, next) => {
+router.patch("/mypage/:postId", authmiddleware, async (req, res, next) => {
   const { postId } = req.params;
   const { userId } = res.locals.user;
   try {
