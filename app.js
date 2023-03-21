@@ -7,6 +7,9 @@ const MypageRouter = require("./routes/mypage.route");
 const DetailRouter = require("./routes/detail.route");
 const AdminRouter = require("./routes/admins.route.js");
 
+require("dotenv").config();
+
+
 const app = express();
 const PORT = 3017;
 

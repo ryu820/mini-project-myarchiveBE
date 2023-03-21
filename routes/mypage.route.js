@@ -12,11 +12,11 @@ router.get("/mypage", authmiddleware,mypagecontroller.getPost);
 
 //유저 게시글 수정API
 //localhost:3017/post/:postId
-router.put("/post/:postId", authmiddleware,mypagecontroller.ModifyPost);
+router.patch("/post/:postId", authmiddleware,mypagecontroller.ModifyPost);
 
 //위시리스트 수정API
 //localhost:3017/mypage/:postId
-router.put("/mypage/:postId", authmiddleware,mypagecontroller.checkWishList);
+router.patch("/mypage/:postId", authmiddleware,mypagecontroller.checkWishList);
 
 
 module.exports = router;
