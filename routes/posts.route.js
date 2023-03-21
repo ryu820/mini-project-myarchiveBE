@@ -15,8 +15,8 @@ router.get("/", postsController.getPosts);
 router.post("/post", authmiddleware, postsController.createPost);
 router.delete("/post/:postId", authmiddleware, postsController.delPost);
 
-// //게시글 조회api
-// //localhost:3017
+//게시글 조회api
+//localhost:3017
 // router.get("/", async (req, res, next) => {
 //   try {
 //     const posts = await Posts.findAll({

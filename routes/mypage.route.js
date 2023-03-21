@@ -1,157 +1,22 @@
 const express = require("express");
-const axios = require("axios");
-const cheerio = require("cheerio");
-const { Posts, Users } = require("../models");
 const authmiddleware = require("../middlewares/auth-middleware.js");
-const CustomError = require("../middlewares/errorhandler");
 const router = express.Router();
+
+const MypageController = require("../controllers/mypage.controllers.js")
+const mypagecontroller = new MypageController();
 
 //유저 게시글 조회API
 //localhost:3017/mypage
-router.get("/mypage", authmiddleware, async (req, res) => {
-  // try {
-  const { userId } = res.locals.user;
-  const donepostlist = await Posts.findAll({
-    raw: true,
-    attributes: [
-      "postId",
-      "User.nick",
-      "url",
-      "img",
-      "title",
-      "category",
-      "desc",
-      "isDone",
-      "createdAt",
-      "updatedAt",
-    ],
-    include: [
-      {
-        model: Users,
-        attributes: []
-      }
-    ],
-    where: {
-      userId: userId,
-      isDone: true,
-    },
-    order: [["createdAt", "DESC"]],
-  });
-  const notDonepostlist = await Posts.findAll({
-    raw: true,
-    attributes: [
-      "postId",
-      "User.nick",
-      "url",
-      "img",
-      "title",
-      "category",
-      "desc",
-      "isDone",
-      "createdAt",
-      "updatedAt",
-    ],
-    include: [
-      {
-        model: Users,
-        attributes: []
-      }
-    ],
-    where: {
-      userId: userId,
-      isDone: false,
-    },
-    order: [["createdAt", "DESC"]],
-  });
-  const postslist = { done: donepostlist, notdone: notDonepostlist };
-  res.status(200).json(postslist);
-  // } catch (error) {
-  //   res.status(400).json({ errorMessage: "게시글 조회에 실패하였습니다." });
-  // }
-});
+router.get("/mypage", authmiddleware,mypagecontroller.getPost);
+
 
 //유저 게시글 수정API
 //localhost:3017/post/:postId
-router.put("/post/:postId", authmiddleware, async (req, res, next) => {
-  const { userId } = res.locals.user;
-  const { postId } = req.params;
-  const { url: postUrl, title, desc } = req.body;
-  try {
-    const existPost = await Posts.findOne({
-      where: {
-        postId: postId,
-        userId: userId,
-      },
-    });
-    //게시글이 존재하지 않을 때
-    if (!existPost) {
-      throw new CustomError("게시글이 존재하지 않습니다.", 403);
-    }
-    //수정권한이 없을때
-    if (userId !== existPost.userId) {
-      throw new CustomError("게시글 수정의 권한이 존재하지 않습니다.", 403);
-    }
-    //url 수정
-    let imageUrl;
-
-    if (postUrl) {
-      const response = await axios.get(postUrl); //이거 두개 if로 걸러주고
-      let $ = cheerio.load(response.data);
-      imageUrl =
-        $("img#mainImg").attr("src") ||
-        $('meta[property="og:image"]').attr("content");
-    } else {
-      undefined;
-    }
-    //수정 업데이트
-    await Posts.update(
-      {
-        url: postUrl,
-        img: imageUrl,
-        title,
-        desc,
-      },
-      { where: { postId, userId } }
-    );
-    res.status(200).json({ message: "게시글을 수정하였습니다." });
-  } catch (error) {
-    next(error);
-    res
-      .status(401)
-      .json({ errorMessage: "게시글이 정상적으로 수정되지 않았습니다." });
-  }
-});
+router.put("/post/:postId", authmiddleware,mypagecontroller.ModifyPost);
 
 //위시리스트 수정API
 //localhost:3017/mypage/:postId
-router.put("/mypage/:postId", authmiddleware, async (req, res, next) => {
-  const { postId } = req.params;
-  const { userId } = res.locals.user;
-  try {
-    const existPost = await Posts.findOne({ where: { postId, userId } });
-    //게시글이 존재하지 않을 때
-    if (!existPost) {
-      throw new CustomError("게시글이 존재하지 않습니다.", 403);
-    }
-    if (existPost.isDone == false) {
-      const done = true;
-      await Posts.update({ isDone: done }, { where: { postId, userId } });
-      return res
-        .status(200)
-        .json({ message: "위시리스트에서 구매리스트로 이동하였습니다." });
-    } else if (existPost.isDone == true) {
-      const done = false;
-      await Posts.update({ isDone: done }, { where: { postId, userId } });
-      return res
-        .status(200)
-        .json({ message: "구매리스트에서 위시리스트로 이동하였습니다." });
-    }
-  } catch (error) {
-    next(error);
-    res
-      .status(401)
-      .json({ errorMessage: "게시글이 정상적으로 수정되지 않았습니다." });
-  }
-});
+router.put("/mypage/:postId", authmiddleware,mypagecontroller.checkWishList);
+
 
 module.exports = router;
