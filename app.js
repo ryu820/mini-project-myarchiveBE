@@ -13,17 +13,14 @@ const PORT = 3017;
 // app.use(cors());
 app.use(
   cors({
-    origin:true,
-    credential: true,
-    "Access-Control-Allow-Origin": [
+    origin: [
       "http://mini-project-myarchive.s3-website.ap-northeast-2.amazonaws.com/",
       "http://localhost:3000"
     ], //프론트의 url
+    credentials: true, //쿠키정책
     optionsSuccessStatus: 200,
-    "Access-Control-Expose-Headers": 'token',
-    "Access-Control-Expose-Credentials": true
-  })
-);
+    exposedHeaders: ['token']}
+));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
