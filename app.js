@@ -14,6 +14,7 @@ const PORT = 3017;
 app.use(
   cors({
     origin:true,
+    credential: true,
     "Access-Control-Allow-Origin": [
       "http://mini-project-myarchive.s3-website.ap-northeast-2.amazonaws.com/",
       "http://localhost:3000"
