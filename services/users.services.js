@@ -1,4 +1,5 @@
 const CustomError = require("../middlewares/errorhandler.js");
+const bcrypt = require('bcrypt');
 
 const UserRepository = require("../repositories/users.repositories.js")
 class UserService {
@@ -28,6 +29,7 @@ class UserService {
             // console.log(password + " = 형식이 일치하지 않습니다");
             throw new CustomError("패스워드 형식이 일치하지 않습니다.", 412)
         }
+
         //닉네임,아이디 중복 체크
         const checkNick = await this.UserRepository.findByNick({ nick })
         const checkId = await this.UserRepository.findById({ accountId })
@@ -38,14 +40,18 @@ class UserService {
             throw new CustomError("중복된 아이디입니다.", 412)
         }
     }
-    checkloginUser = async({ accountId, password }) => {
+    checkloginUser = async ({ accountId, password }) => {
         const user = await this.UserRepository.findById({ accountId })
         if (!user) {
             throw new CustomError("존재하지 않는 유저입니다.", 401)
-        } else if (user.password != password) {
+        }
+        //암호화된 패스워드 검증
+        const checkpassword = await bcrypt.compare(password, user.password);
+        if (checkpassword) {
+            return user;
+        } else if (!checkpassword) {
             throw new CustomError("비밀번호가 일치하지 않습니다.", 412)
         }
-        return user;
     }
 
 }

@@ -1,6 +1,7 @@
 const UserService = require("../services/users.services.js");
 const CustomError = require("../middlewares/errorhandler.js");
-const { Users } = require("../models");
+const bcrypt = require('bcrypt');
+const salt = 10;
 const env = process.env;
 const jwt = require("jsonwebtoken");
 
@@ -49,7 +50,19 @@ class UserController {
       //아이디,비밀번호,닉네임체크
       await this.UserService.checkUser({ accountId, password, nick });
       //유저 등록
-      await this.UserService.createUser({ accountId, password, nick });
+      //비밀번호 암호화 작업
+      bcrypt.hash(password, salt, async (err, encryptedPW) => {
+        if (err) {
+          throw new CustomError("회원가입이 실패했습니다.", 412);
+        } else {
+          await this.UserService.createUser({
+            accountId,
+            password: encryptedPW,
+            nick
+          })
+        }
+      })
+      // await this.UserService.createUser({ accountId, password, nick });
       return res.status(201).json({ message: "회원가입에 성공하였습니다" });
     } catch (error) {
       next(error);
