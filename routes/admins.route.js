@@ -114,7 +114,7 @@ router.delete("/admin/posts/:postId", async (req, res, next) => {
     //   throw new CustomError("게시글이 존재하지않아유~", 404);
     // }
     await Posts.destroy({
-      where: { postId }
+      where: { postId : deletePost.postId }
     })
     res.status(200).json({ "message": "해당 게시물을 삭제하였습니다." })
   } catch (error) {
