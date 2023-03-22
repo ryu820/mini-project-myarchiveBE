@@ -29,7 +29,16 @@ class AdminRepository extends Admins {
   };
 
   allPosts = async () => {
-    const allposts = await Posts.findAll();
+    const allposts = await Posts.findAll({
+      attributes :["postId","User.nick","url","img","title","category","desc","isDone","createdAt","updatedAt"],
+      include: [
+        {
+        model: Users,
+        attributes: [],
+        },
+        ],
+        raw: true,
+    });
     return allposts;
   };
 

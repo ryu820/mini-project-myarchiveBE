@@ -16,7 +16,6 @@ module.exports = {
           model: "Users", // Users 모델을 참조합니다.
           key: "userId", // Users 모델의 userId를 참조합니다.
         },
-        onDelete: "CASCADE",
       },
       url: {
         allowNull: true,

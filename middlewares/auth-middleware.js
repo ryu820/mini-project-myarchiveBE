@@ -5,17 +5,15 @@ const env = process.env;
 
 module.exports = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
-    // const { token } = req.cookies;
+    // const token = req.headers.authorization;
+    const { token } = req.cookies;
 
     console.log("token : ", token);
     const [tokenType, tokendata] = (token ?? "").split(" ");
     console.log("tokendata : ", tokendata);
 
     if (tokenType !== "Bearer") {
-      return res
-        .status(401)
-        .json({ message: "토큰 타입이 일치하지 않습니다." });
+      return res.status(401).json({ message: "토큰 타입이 일치하지 않습니다." });
     } else if (!tokendata){
       return res.status(401).json({message: "토큰 데이터가 없습니다."}) //내일 배포 후 확인하기
     }
