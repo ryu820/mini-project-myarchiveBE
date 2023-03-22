@@ -1,5 +1,6 @@
 const express = require("express");
 const { Posts, Users } = require("../models");
+const CustomError = require("../middlewares/errorhandler.js");
 const { Op } = require("sequelize");
 const axios = require("axios");
 const cheerio = require("cheerio");
