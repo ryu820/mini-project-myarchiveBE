@@ -21,8 +21,7 @@ module.exports = async (req, res, next) => {
     console.log(decodedToken);
 
     const accountId = decodedToken.accountId;
-    const user = await Users.findOne({ where: { accountId } });
-
+    const user = await Admins.findOne({ where: { accountId } });
 
     if (!user) {
       res.clearCookie("token");
