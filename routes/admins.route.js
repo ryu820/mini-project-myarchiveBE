@@ -83,13 +83,10 @@ router.delete("/admin/users/:userId", async (req, res, next) => {
   const { userId } = req.params;
   try {
     const deleteUser = await Users.findOne({ where: { userId } });
-    console.log(deleteUser,userId)
-
     await Users.destroy({
-      where: { userId : deleteUser.userId }
-    })
-    res.status(200).json({ "message": "해당 회원을 삭제하였습니다." })
-
+      where: { userId: deleteUser.userId },
+    });
+    res.status(200).json({ message: "해당 회원을 삭제하였습니다." });
   } catch (error) {
     next(error);
   }
@@ -119,7 +116,6 @@ router.delete("/admin/posts/:postId", async (req, res, next) => {
       where: { postId: deletePost.postId },
     });
     res.status(200).json({ message: "해당 게시물을 삭제하였습니다." });
-
   } catch (error) {
     next(error);
   }
