@@ -5,8 +5,8 @@ const env = process.env;
 
 module.exports = async (req, res, next) => {
   try {
-    const token = req.headers.authorization;
-    // const { token } = req.cookies;
+    // const token = req.headers.authorization;
+    const { token } = req.cookies;
 
     console.log("token : ", token);
     const [tokenType, tokendata] = (token ?? "").split(" ");
@@ -21,8 +21,7 @@ module.exports = async (req, res, next) => {
     console.log(decodedToken);
 
     const accountId = decodedToken.accountId;
-    const user = await Users.findOne({ where: { accountId } });
-
+    const user = await Admins.findOne({ where: { accountId } });
 
     if (!user) {
       res.clearCookie("token");
