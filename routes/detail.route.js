@@ -3,6 +3,7 @@ const authmiddleware = require("../middlewares/auth-middleware.js")
 const CustomError = require("../middlewares/errorhandler");
 const router = express.Router();
 const { Posts, Comments, Users } = require("../models");
+const { Op } = require("sequelize");
 
 
 // const DetailController = require("../controllers/detail.controllers");
