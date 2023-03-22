@@ -109,11 +109,13 @@ router.delete("/admin/posts/:postId", async (req, res, next) => {
   try {
     const { postId } = req.params;
     const deletePost = await Posts.findOne({ where: { postId } });
-    console.log(deletePost, postId)
+    console.log(deletePost,postId)
     // if (!deletePost) {
     //   throw new CustomError("게시글이 존재하지않아유~", 404);
     // }
-    await Posts.destroy(deletePost)
+    await Posts.destroy({
+      where: { postId : deletePost.postId }
+    })
     res.status(200).json({ "message": "해당 게시물을 삭제하였습니다." })
   } catch (error) {
     next(error);
