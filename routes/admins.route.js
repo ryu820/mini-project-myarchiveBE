@@ -105,7 +105,28 @@ router.delete("/admin/users/:userId", async (req, res, next) => {
 //전체 게시글 조회
 router.get("/admin/posts", async (req, res, next) => {
   try {
-    const posts = await Posts.findAll();
+    const posts = await Posts.findAll({
+      raw: true,
+      attributes: [
+        "postId",
+        "User.accountId",
+        "User.nick",
+        "url",
+        "img",
+        "category",
+        "title",
+        "desc",
+        "isDone",
+        "createdAt",
+        "updatedAt"
+      ],
+      include: [
+        {
+          model: Users,
+          attributes: [],
+        },
+      ],
+    });
 
     res.status(200).json({ posts });
   } catch (error) {
@@ -155,7 +176,24 @@ router.delete("/admin/posts/:postId", async (req, res, next) => {
 //전체 댓글 조회
 router.get("/admin/comments", async (req, res, next) => {
   try {
-    const comments = await Comments.findAll();
+    const comments = await Comments.findAll({
+      raw: true,
+      attributes: [
+        "commentId",
+        "Post.postId",
+        "User.nick",
+        "comment",
+        "createdAt",
+        "updatedAt"
+      ],
+      include: [{
+        model: Users,
+        attributes: []
+      }, {
+        model: Posts,
+        attributes: [],
+      }],
+    });
 
     res.status(200).json({ comments });
   } catch (error) {
