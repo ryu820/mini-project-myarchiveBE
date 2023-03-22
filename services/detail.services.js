@@ -1,5 +1,6 @@
 const DetailRepository = require("../repositories/detail.repositories");
 const CustomError = require("../middlewares/errorhandler");
+const { Comments } = require("../models");
 
 class DetailService {
   constructor() {

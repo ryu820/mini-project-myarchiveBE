@@ -1,5 +1,5 @@
 const express = require("express");
-const authmiddleware = require("../middlewares/auth-middleware");
+const authmiddleware = require("../middlewares/auth-middleware.js")
 const CustomError = require("../middlewares/errorhandler");
 const router = express.Router();
 const { Posts, Comments, Users } = require("../models");
@@ -11,11 +11,7 @@ const detailsController = new DetailController();
 router.get("/:postId", detailsController.OnesPost);
 router.get("/:postId/comments", detailsController.getComment);
 router.post("/:postId/comments", authmiddleware, detailsController.postComment);
-router.delete(
-  "/:postId/comments/:commentId",
-  authmiddleware,
-  detailsController.delComment
-);
+router.delete("/:postId/comments/:commentId",authmiddleware,detailsController.delComment);
 
 //게시물 단일조회
 //localhost:3017/post/:postId
