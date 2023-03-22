@@ -68,7 +68,7 @@ router.post("/admin", async (req, res, next) => {
 
 //관리자:전체유저조회API
 //localhost:3017/admin/users
-router.get("/admin/users", adminauthmiddleware, async (req, res, next) => {
+router.get("/admin/users", async (req, res, next) => {
     try {
         const users = await Users.findAll()
         res.status(200).json({ "users": users })
@@ -80,7 +80,7 @@ router.get("/admin/users", adminauthmiddleware, async (req, res, next) => {
 
 //관리자:특정유저삭제API
 //localhost:3017/admin/users/:userId
-router.delete("/admin/users/:userId",adminauthmiddleware, async (req, res, next) => {
+router.delete("/admin/users/:userId", async (req, res, next) => {
     const { userId } = req.params;
     try {
         await Users.destroy({
@@ -94,7 +94,7 @@ router.delete("/admin/users/:userId",adminauthmiddleware, async (req, res, next)
 })
 
 //전체 게시글 조회
-router.get("/admin/posts",adminauthmiddleware, async (req, res, next) => {
+router.get("/admin/posts", async (req, res, next) => {
   try {
     const posts = await Posts.findAll();
 
@@ -105,7 +105,7 @@ router.get("/admin/posts",adminauthmiddleware, async (req, res, next) => {
 });
 
 //게시글  삭제
-router.delete("/admin/posts/:postId",adminauthmiddleware, async (req, res, next) => {
+router.delete("/admin/posts/:postId", async (req, res, next) => {
   try {
     const { postId } = req.params;
     const deletePost = await Posts.findOne({ where: { postId } });
@@ -123,7 +123,7 @@ router.delete("/admin/posts/:postId",adminauthmiddleware, async (req, res, next)
 });
 
 //전체 댓글 조회
-router.get("/admin/comments",adminauthmiddleware, async (req, res, next) => {
+router.get("/admin/comments", async (req, res, next) => {
   try {
     const comments = await Comments.findAll();
 
@@ -134,7 +134,7 @@ router.get("/admin/comments",adminauthmiddleware, async (req, res, next) => {
 });
 
 //댓글 삭제
-router.delete("/admin/comments/:commentId",adminauthmiddleware, async (req, res, next) => {
+router.delete("/admin/comments/:commentId", async (req, res, next) => {
   try {
     const { commentId } = req.params;
     const deleteComment = await Comments.findOne({ where: { commentId } });
