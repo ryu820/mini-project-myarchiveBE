@@ -38,8 +38,8 @@ const adminauthmiddleware = require("../middlewares/admin-auth-middleware");
 
 
 //관리자 로그인 API
-//localhost:3017/admin/login
-router.post("/admin/login", async (req, res, next) => {
+//localhost:3017/admin
+router.post("/admin", async (req, res, next) => {
     const { accountId, password, secretKey } = req.body;
     try {
         const adminUser = await Admins.findOne({ where: { accountId } })
