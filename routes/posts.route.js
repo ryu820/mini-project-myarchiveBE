@@ -15,7 +15,7 @@ const router = express.Router();
 // router.delete("/post/:postId", authmiddleware, postsController.delPost);
 
 //게시글 조회api
-//localhost:3017
+//localhost:3017 
 router.get("/", async (req, res, next) => {
     try {
       const posts = await Posts.findAll({
