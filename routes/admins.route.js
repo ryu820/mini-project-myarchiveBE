@@ -109,7 +109,7 @@ router.delete("/admin/posts/:postId", async (req, res, next) => {
   try {
     const { postId } = req.params;
     const deletePost = await Posts.findOne({ where: { postId } });
-    console.log(deletePost)
+    console.log(deletePost,postId)
     // if (!deletePost) {
     //   throw new CustomError("게시글이 존재하지않아유~", 404);
     // }
