@@ -5,8 +5,8 @@ const env = process.env;
 
 module.exports = async (req, res, next) => {
   try {
-    // const token = req.headers.authorization;
-    const { token } = req.cookies;
+    const token = req.headers.authorization;
+    // const { token } = req.cookies;
 
     console.log("token : ", token);
     const [tokenType, tokendata] = (token ?? "").split(" ");
@@ -31,6 +31,7 @@ module.exports = async (req, res, next) => {
         .json({ message: "토큰 사용자가 존재하지 않습니다." });
     }
     res.locals.user = user;
+    console.log(user)
 
     next();
   } catch (error) {
