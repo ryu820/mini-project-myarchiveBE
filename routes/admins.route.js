@@ -83,6 +83,7 @@ router.delete("/admin/users/:userId", async (req, res, next) => {
   const { userId } = req.params;
   try {
     const deleteUser = await Users.findOne({ where: { userId } });
+    console.log(deleteUser.userId, userId);
     await Users.destroy({
       where: { userId: deleteUser.userId },
     });
