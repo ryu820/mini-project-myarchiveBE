@@ -1,6 +1,6 @@
 const CustomError = require("../middlewares/errorhandler");
 const { Posts, Users, Comments } = require("../models");
-const { Op } = require("sequelize");
+
 
 class DetailRepository extends Comments {
   constructor() {
