@@ -39,7 +39,7 @@ class PostController {
         desc,
         isDone: false,
       });
-      res.status(201).json({ posts, message: "게시글 작성에 성공하였습니다." });
+      res.status(201).json({ message: "게시글 작성에 성공하였습니다." });
     } catch (error) {
       next(error);
     }
