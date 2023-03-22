@@ -7,7 +7,6 @@ class UserRepository {
     }
     findByNick = async ({ nick }) => {
         const check = await Users.findOne({ where: { nick } });
-        console.log(check)
         return check;
     }
     createUser = async ({ accountId, password, nick }) => {
