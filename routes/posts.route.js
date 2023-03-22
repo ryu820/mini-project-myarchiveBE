@@ -36,6 +36,7 @@ router.get("/", async (req, res, next) => {
           attributes: [],
         },
       ],
+      order: [["postId", "desc"]],
     });
     res.status(200).json({ posts: posts });
   } catch (error) {
