@@ -5,11 +5,11 @@ const env = process.env;
 
 module.exports = async (req, res, next) => {
   try {
-    // const token = req.headers.authorization;
-    const { token } = req.cookies;
+    const {authorization} = req.headers;
+    // const { token } = req.cookies;
 
-    console.log("token : ", token);
-    const [tokenType, tokendata] = (token ?? "").split(" ");
+    console.log("token : ", authorization);
+    const [tokenType, tokendata] = (authorization ?? "").split(" ");
     console.log("tokendata : ", tokendata);
 
     if (tokenType !== "Bearer") {
