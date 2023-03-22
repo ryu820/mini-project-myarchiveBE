@@ -85,13 +85,13 @@ router.delete("/admin/users/:userId", async (req, res, next) => {
     const deleteUser = await Users.findOne({ where: { userId } });
     console.log(deleteUser.userId, userId);
 
-    await Comments.destroy({ //딸려있는 테이블 : comments
-      where: { userId: deleteUser.userId },
-    });
+    // await Comments.destroy({ //딸려있는 테이블 : comments
+    //   where: { userId: deleteUser.userId },
+    // });
 
-    await Posts.destroy({ //딸려있는 테이블 : posts
-      where: { userId: deleteUser.userId },
-    });
+    // await Posts.destroy({ //딸려있는 테이블 : posts
+    //   where: { userId: deleteUser.userId },
+    // });
 
     await Users.destroy({ //삭제할때 딸려있는 자식 테이블 다 삭제하기
       where: { userId: deleteUser.userId },
@@ -122,9 +122,9 @@ router.delete("/admin/posts/:postId", async (req, res, next) => {
     if (!deletePost) {
       throw new CustomError("게시글이 존재하지않아유~", 404);
     }
-    await Comments.destroy({ //딸려있는 테이블 : comments
-      where: { userId: deleteUser.userId },
-    });
+    // await Comments.destroy({ //딸려있는 테이블 : comments
+    //   where: { userId: deleteUser.userId },
+    // });
 
     await Posts.destroy({
       where: { postId: deletePost.postId },

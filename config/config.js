@@ -1,6 +1,7 @@
 require("dotenv").config();
 const env = process.env
-module.exports ={
+
+module.exports = {
   "development": {
     "username": env.MYSQL_USERNAME,
     "password": env.MYSQL_PASSWORD,
