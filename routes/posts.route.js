@@ -115,6 +115,7 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     var month = ('0' + (today.getMonth() + 1)).slice(-2);
     var day = ('0' + today.getDate()).slice(-2);
     var dateString = year + '-' + month + '-' + day;
+    
     const posts = await Posts.create({
       userId: userId,
       url: postUrl,
