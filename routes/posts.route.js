@@ -111,7 +111,6 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     } else {
       undefined;
     }
-
     const posts = await Posts.create({
       userId: userId,
       url: postUrl,

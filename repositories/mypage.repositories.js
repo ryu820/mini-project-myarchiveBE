@@ -41,18 +41,36 @@ class MypageRepository {
     }
 
     updatePost = async ({ postId, userId, postUrl, imageUrl, title, desc }) => {
+        var today = new Date();
+
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+        var dateString = year + '-' + month + '-' + day;
         await Posts.update(
             {
                 url: postUrl,
                 img: imageUrl,
                 title,
                 desc,
+                updatedAt: dateString
             },
             { where: { postId, userId } }
         );
     }
-    updateWishList = async ({ postId, userId , done }) => {
-        await Posts.update({ isDone: done }, { where: { postId, userId } });
+    updateWishList = async ({ postId, userId, done }) => {
+        var today = new Date();
+
+        var year = today.getFullYear();
+        var month = ('0' + (today.getMonth() + 1)).slice(-2);
+        var day = ('0' + today.getDate()).slice(-2);
+        var dateString = year + '-' + month + '-' + day;
+        await Posts.update({
+            isDone: done,
+            updatedAt: dateString
+        }, {
+            where: { postId, userId }
+        });
     }
 
 }
