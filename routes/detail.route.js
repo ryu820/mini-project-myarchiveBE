@@ -87,10 +87,20 @@ router.post("/:postId/comments", authmiddleware, async (req, res, next) => {
     if (Number(comment.length > 100 || typeof comment !== "string")) {
       throw new CustomError("글자 수를 초과하였습니다.", 412);
     }
+
+    var today = new Date();
+
+    var year = today.getFullYear();
+    var month = ('0' + (today.getMonth() + 1)).slice(-2);
+    var day = ('0' + today.getDate()).slice(-2);
+    var dateString = year + '-' + month  + '-' + day;
+
     const comments = await Comments.create({
       userId: userId,
       postId: postId,
       comment: comment,
+      createdAt: dateString,
+      updatedAt: dateString
     });
 
     res.status(201).json({ comments, message: "댓글 작성에 성공하였습니다." });
