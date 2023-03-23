@@ -28,6 +28,7 @@ router.get("/", async (req, res, next) => {
         "category",
         "title",
         "isDone",
+        "createdAt",
       ],
       include: [
         {
@@ -35,6 +36,7 @@ router.get("/", async (req, res, next) => {
           attributes: [],
         },
       ],
+      order: [["postId", "desc"]],
     });
     res.status(200).json({ posts: posts });
   } catch (error) {
@@ -109,13 +111,6 @@ router.post("/post", authmiddleware, async (req, res, next) => {
     } else {
       undefined;
     }
-    var today = new Date();
-
-    var year = today.getFullYear();
-    var month = ('0' + (today.getMonth() + 1)).slice(-2);
-    var day = ('0' + today.getDate()).slice(-2);
-    var dateString = year + '-' + month + '-' + day;
-    
     const posts = await Posts.create({
       userId: userId,
       url: postUrl,
@@ -124,8 +119,6 @@ router.post("/post", authmiddleware, async (req, res, next) => {
       category,
       desc,
       isDone: false,
-      createdAt : dateString,
-      updatedAt : dateString
     });
     if (!posts) {
       throw new CustomError("데이터 형식이 올바르지 않습니다..", 412);
