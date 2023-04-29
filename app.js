@@ -29,15 +29,10 @@ app.use(
   })
 );
 
-const accessLogStream = fs.createWriteStream(`${__dirname}/log/access.log`, {
-  flags: "a",
-});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-//morgan
-app.use(morgan("dev", { stream: accessLogStream }));
 
 app.use("/", [postsRouter, usersRouter, MypageRouter, AdminRouter]);
 app.use("/post", DetailRouter);
